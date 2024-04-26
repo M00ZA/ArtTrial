@@ -33,7 +33,7 @@ export type Address = {
 }
 
 export type Admin = {
-  _id: string,
+  id: string,
   nId: string,
   name: string,
   userName: string,
