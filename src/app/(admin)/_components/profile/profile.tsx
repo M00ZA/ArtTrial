@@ -141,7 +141,7 @@ const ProfilePageComponent = () => {
     <div className=''>
       <header className='flex gap-2 items-center'>
         <Avatar className='size-12'>
-          {<AvatarImage src={admin?.profileImg} alt="@shadcn" />}
+          {<AvatarImage src={admin?.profileImg?.secure_url} alt="@shadcn" />}
           <AvatarFallback>{admin?.name[0]}</AvatarFallback>
         </Avatar>
         <h5 className='font-semibold'>

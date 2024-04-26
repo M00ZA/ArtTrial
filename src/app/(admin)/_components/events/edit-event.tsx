@@ -68,7 +68,7 @@ export const EditEventComponent = () => {
   })
 
   const event: Event = getEventQuery.data?.data?.data?.event
-  const products: Product[] = allProducts.data?.data?.data?.products.filter((p: Product) => p?.owner?._id === event?.owner)
+  const products: Product[] = allProducts.data?.data?.data?.products.filter((p: Product) => p?.owner?._id === event?.owner?._id)
   const eventProducts: string[] = event?.products?.map((product: Product) => product._id)
 
   const [selectedProducts, setSelectedProducts] = useState<string[]>(eventProducts)

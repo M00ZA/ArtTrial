@@ -82,7 +82,7 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
  
             <div className='ml-2'>
               <Avatar>
-                <AvatarImage src={admin?.profileImg} alt="@shadcn" />
+                <AvatarImage src={admin?.profileImg?.secure_url} alt="@shadcn" />
                 <AvatarFallback className='capitalize'>{admin?.name[0] ?? "L"}</AvatarFallback>
               </Avatar>
             </div>

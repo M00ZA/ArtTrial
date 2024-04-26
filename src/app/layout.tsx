@@ -1,6 +1,6 @@
 // import './globals.css'
 
-import { Inter } from 'next/font/google'
+// import { Inter } from 'next/font/google'
 import { Cairo } from 'next/font/google'
 
 import StoreProvider from '@/providers/redux'
@@ -10,7 +10,7 @@ import { cookies } from 'next/headers'
 import { COOKIE_LANG } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
-const inter = Inter({ subsets: ['latin'] })
+// const inter = Inter({ subsets: ['latin'] })
 const cairo = Cairo({ subsets: ['latin'] })
 
 interface LayoutProps {
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang={language === 'english' ? 'en' : 'ar'} dir={language === 'english' ? 'ltr' : 'rtl'}>
       <body className={cn(
-        language === 'english' ? inter.className : cairo.className,
+        language === 'english' ? "": cairo.className,
         language === 'english' ? 'ltr' : 'rtl',
       )}>
         <ReactQueryProvider>

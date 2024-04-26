@@ -13,7 +13,7 @@ export type Artist = {
   _id: string,
   name: string,
   email: string,
-  phoneNumber: string,
+  phone: string,
   userName?: string,
   profileImg?: Picture,
   accountActive: boolean,
@@ -29,7 +29,7 @@ export type Address = {
   city: string,
   country: string,
   postalCode: string,
-  phoneNumber: string,
+  phone: string,
 }
 
 export type Admin = {
@@ -37,11 +37,11 @@ export type Admin = {
   nId: string,
   name: string,
   userName: string,
-  phoneNumber: string,
+  phone: string,
   profileImg: Picture,
   gender: string,
   role: string,
-}
+  }
 
 export type Picture = {
   public_id: string, secure_url: string

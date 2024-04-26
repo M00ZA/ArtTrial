@@ -90,7 +90,7 @@ export const ViewUserComponent = () => {
                         </h4>
                         <p className='text-gray-500 text-xs'>{address.street} - {address.region}</p>
                         <p className='text-gray-500 text-xs'>Postal Code: {address.postalCode}</p>
-                        <p className='text-center'>{address.phoneNumber}</p>
+                        <p className='text-center'>{address.phone}</p>
                       </div>
                     ))}
                   </div>
