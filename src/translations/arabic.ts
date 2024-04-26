@@ -1,0 +1,15 @@
+export const ArabicPhrases: any = {
+  login: 'سجل دخولك',
+  welcome_message: 'هذه رسالة ترحيب',
+  admins: 'المشرفين',
+  new: 'اضافة',
+  start_at: 'تبدأ في',
+  end_at: 'تنتهي في',
+  event_details: 'تفاصيل الحدث',
+  view_event: 'مشاهدة تفاصيل الحدث',
+  edit: 'تعديل',
+  delete: 'مسح',
+  products: 'المنتجات',
+  owner: 'المالك',
+  duration: 'المدة',
+}

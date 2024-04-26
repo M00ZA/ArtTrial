@@ -1,0 +1,26 @@
+import * as z from 'zod'
+import axios from "axios";
+
+import { headers, useAPI } from "@/lib/utils";
+import { getCookie } from "cookies-next";
+import { EditProductSchema, EditUserSchema } from "@/schema";
+
+export async function getProducts() {
+  const token = getCookie('token')
+  return await axios.get(useAPI(`products`), headers(token))
+}
+
+export async function getProduct(id: string) {
+  const token = getCookie('token')
+  return await axios.get(useAPI(`products/${id}`), headers(token))
+}
+
+export async function updateProduct(id: string, values: z.infer<typeof EditProductSchema>) {
+  const token = getCookie('token')
+  return await axios.patch(useAPI(`products/${id}`), values, headers(token))
+}
+
+export async function deleteProduct(id: string) {
+  const token = getCookie('token')
+  return await axios.delete(useAPI(`products/${id}`), headers(token))
+}
