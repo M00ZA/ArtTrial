@@ -97,3 +97,31 @@ export const EditEventSchema = z.object({
   duration: z.number().gt(0, { message: "Number required in duration" }),
   products: z.string().array()
 })
+
+export const userLoginSchema = z.object({
+  email: z.string().min(1, { message: "email cannot be empty" }),
+  password: z.string().min(1, { message: "Password cannot be empty" }),
+}) 
+
+export const forgetPassword = z.object({
+  email: z.string().min(1, { message: "email cannot be empty" })
+}) 
+
+export const verifyReset = z.object({
+  email: z.string().min(1, { message: "email cannot be empty" }),
+  resetCode:  z.string().min(1, { message: "reset code cannot be empty" }),
+}) 
+
+export const resetPassword = z.object({
+  email: z.string().min(1, { message: "email cannot be empty" }),
+  password: z.string().min(1, { message: "Password cannot be empty" }),
+  passwordConfirm: z.string().min(1, { message: "Password cannot be empty" }),
+}).superRefine(({ passwordConfirm, password }, ctx) => {
+  if (passwordConfirm !== password) {
+    ctx.addIssue({
+      code: "custom",
+      message: "The passwords did not match",
+      path: ['passwordConfirm']
+    });
+  }
+});
