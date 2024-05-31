@@ -1,15 +1,12 @@
 "use client";
 import { API_URL } from "@/lib/constants";
-import { userLoginSchema } from "@/schema";
+import { verifyEmail } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Box, Stack } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import * as zod from "zod";
-
-import { setCookie } from "cookies-next";
 
 import { Form } from "@/components/ui/form";
 import {
@@ -22,58 +19,59 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-import { Loader, LockKeyhole, User } from "lucide-react";
+import { Loader, LockKeyhole, ShieldCheck, User } from "lucide-react";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Link from "next/link";
+import { setCookie } from "cookies-next";
 
-export default function Login() {
+export default function VerifyEmail() {
   const router = useRouter();
-  const type = useSearchParams().get("type");
-  const endpoint = type == "artist" ? "artistAuth/login" : "userAuth/login";
-  const form = useForm<Zod.infer<typeof userLoginSchema>>({
+  const form = useForm<Zod.infer<typeof verifyEmail>>({
     defaultValues: {
-      email: "mohamedabdelstar30@gmail.com",
-      password: "#Mohammed2002",
+      email: "",
     },
-    resolver: zodResolver(userLoginSchema),
+    resolver: zodResolver(verifyEmail),
   });
 
-  const loginMutation = useMutation({
-    mutationFn: (values: zod.infer<typeof userLoginSchema>) =>
+  const verifyEmailMutation = useMutation({
+    mutationFn: (values: zod.infer<typeof verifyEmail>) =>
       axios
-        .post(`${API_URL}${endpoint}`, values)
+        .post(`${API_URL}userAuth/verifyEmail`, values)
         .then((d) => d.data)
         .catch((err) => err),
     onSuccess: (data, variable, context) => {
       console.log(data);
       console.log(variable);
       if (data?.data?.token) {
-        toast.success("User found!");
+        toast.success("email verified!");
         setCookie("token", data?.data?.token);
         router.push("/");
-        console.log("Hello From the other side");
       } else {
         toast.error(data.response.data.error_msg);
       }
     },
   });
 
-  const loginHandler = () => {
-    loginMutation.mutate(form.getValues());
+  const submitHandler = () => {
+    verifyEmailMutation.mutate(form.getValues());
   };
 
   return (
     <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
-          <h1 className="text-3xl font-semibold uppercase mb-8">Login</h1>
+          <h1 className="text-xl font-semibold uppercase mb-4">
+            Verify Your Email
+          </h1>
+          <p className="mb-4 text-gray-400">
+            A 4 digits code has been sent to your email address
+          </p>
 
           <div>
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(loginHandler)}
+                onSubmit={form.handleSubmit(submitHandler)}
                 className="flex flex-col gap-y-3"
               >
                 <FormField
@@ -99,16 +97,15 @@ export default function Login() {
 
                 <FormField
                   control={form.control}
-                  name="password"
+                  name="activateCode"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <div className="relative">
-                          <LockKeyhole className="text-gray-400 absolute top-1/2 transform -translate-y-1/2 left-3" />
+                          <ShieldCheck className="text-gray-400 absolute top-1/2 transform -translate-y-1/2 left-3" />
                           <Input
                             {...field}
-                            type="password"
-                            placeholder="Password"
+                            placeholder="verification code"
                             className="pl-12"
                           />
                         </div>
@@ -118,26 +115,16 @@ export default function Login() {
                     </FormItem>
                   )}
                 />
-                <Link href={"/forgetPassword"}>
-                  <p className="text-primary">Forget password ?</p>
-                </Link>
 
                 <Button
                   className="w-full"
-                  disabled={loginMutation.status === "pending"}
+                  disabled={verifyEmailMutation.status === "pending"}
                 >
-                  {loginMutation.status === "pending" && (
+                  {verifyEmailMutation.status === "pending" && (
                     <Loader className="animate-spin mr-2" />
                   )}
-                  Login
+                  Verify
                 </Button>
-                <p className="text-gray-400">
-                  don't have an account?{" "}
-                  <Link href={"/register"}>
-                    {" "}
-                    <span className="text-primary">Register</span>
-                  </Link>
-                </p>
               </form>
             </Form>
           </div>
@@ -145,7 +132,7 @@ export default function Login() {
       </div>
       <div className="flex flex-col items-center justify-center">
         <Image
-          src="/landing-login.svg"
+          src="/verify-email.svg"
           width={300}
           height={300}
           alt="Image"

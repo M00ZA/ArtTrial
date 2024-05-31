@@ -125,3 +125,27 @@ export const resetPassword = z.object({
     });
   }
 });
+
+export const userSignupSchema =  z.object({
+  profileImg: z.any()
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Select a picture (Max Size: 5MB).`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
+  email: z.string().min(1, { message: "email cannot be empty" }),
+  name: z.string().min(1, { message: "Name of is required!" }),
+  phone: z.string().min(1, { message: "Phone number is required!" }),
+  // .regex(/^01[0-2,5]{1}[0-9]{8}$/, { message: 'Invalid Egyptian number!' }),
+  password: z.string().min(8, { message: "Password Must be at least 8 characters" }),
+  passwordConfirm: z.string(),
+  gender: z.string(),
+}).refine((data) => data.password === data.passwordConfirm, {
+  message: "Passwords don't match",
+  path: ["passwordConfirm"],
+});
+
+export const verifyEmail = z.object({
+  email: z.string().min(1, { message: "email cannot be empty" }),
+  activateCode:  z.string().min(1, { message: "activate code cannot be empty" }),
+}) 

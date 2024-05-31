@@ -1,11 +1,18 @@
 "use client";
 import { Box, Stack, Typography } from "@mui/material";
-import SignupTypeCard from "./SignupTypeCard";
+import MemberTypeCard from "./MemberTypeCard";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-const SignupType = () => {
+import { useRouter } from "next/navigation";
+
+interface IProps {
+  type: string;
+}
+
+const MemberType = ({ type }: IProps) => {
   const [selected, setSelected] = useState(0);
+  const router = useRouter();
   return (
     <Box
       component="div"
@@ -29,17 +36,19 @@ const SignupType = () => {
         }}
       >
         <Typography component="h1" variant="h4" textAlign="center">
-          Join as a User or Artist
+          {type == "login"
+            ? "Login as a User or Artist"
+            : "Join as a User or Artist"}
         </Typography>
         <Stack direction="row" spacing={4} marginBottom="12px">
-          <SignupTypeCard
+          <MemberTypeCard
             img="/signup-type-user.svg"
             txt="I am a User"
             index={1}
             selected={selected}
             onClick={() => setSelected(1)}
           />
-          <SignupTypeCard
+          <MemberTypeCard
             img="/signup-type-artist.svg"
             txt="I am an Artist"
             index={2}
@@ -47,26 +56,43 @@ const SignupType = () => {
             onClick={() => setSelected(2)}
           />
         </Stack>
-        <Button disabled={selected === 0}>Create Account</Button>
-        <Typography
-          component="h1"
-          variant="body1"
-          textAlign="center"
-          fontWeight="bold"
+        <Button
+          disabled={selected === 0}
+          onClick={() => {
+            if (selected == 1) {
+              type == "login"
+                ? router.push("/login?type=user")
+                : router.push("/signup?type=user");
+            } else if (selected == 2) {
+              type == "login"
+                ? router.push("/login?type=artist")
+                : router.push("/signup?type=artist");
+            }
+          }}
         >
-          Already have an account?
+          {type == "login" ? "Login" : "Create Account"}
+        </Button>
+        {type == "signup" && (
           <Typography
-            component="span"
+            component="h1"
             variant="body1"
             textAlign="center"
-            color="#6C63FF"
+            fontWeight="bold"
           >
-            <Link href=""> Log in</Link>
+            Already have an account?
+            <Typography
+              component="span"
+              variant="body1"
+              textAlign="center"
+              color="#6C63FF"
+            >
+              <Link href=""> Log in</Link>
+            </Typography>
           </Typography>
-        </Typography>
+        )}
       </Box>
     </Box>
   );
 };
 
-export default SignupType;
+export default MemberType;
