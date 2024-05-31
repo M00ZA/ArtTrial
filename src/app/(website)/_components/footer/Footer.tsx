@@ -13,8 +13,8 @@ const Footer = () => {
       spacing={2}
       sx={{
         padding: "12px",
-        position: "absolute",
-        bottom: "0",
+        // position: "absolute",
+        // bottom: "0",
         width: "100%",
         // height: "400p",
         // alignItems: "center",

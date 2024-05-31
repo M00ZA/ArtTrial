@@ -8,6 +8,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import AvatarDropdown from "../avatarDropdown/AvatarDropdown";
 const Header = () => {
   const [show, setShow] = useState(false);
   const router = useRouter();
@@ -50,7 +51,7 @@ const Header = () => {
           display={{ md: "flex", xs: show ? "flex" : "none" }}
         >
           <Box component="li">
-            <Link href={""}>
+            <Link href={"/"}>
               <Typography
                 component="p"
                 sx={{
@@ -59,12 +60,12 @@ const Header = () => {
                   },
                 }}
               >
-                About
+                Home
               </Typography>
             </Link>
           </Box>
           <Box component="li">
-            <Link href={""}>
+            <Link href={"/gallery"}>
               <Typography
                 component="p"
                 sx={{
@@ -73,26 +74,12 @@ const Header = () => {
                   },
                 }}
               >
-                Artists
+                Gallery
               </Typography>
             </Link>
           </Box>
           <Box component="li">
-            <Link href={""}>
-              <Typography
-                component="p"
-                sx={{
-                  "&:hover": {
-                    color: "blue",
-                  },
-                }}
-              >
-                Collections
-              </Typography>
-            </Link>
-          </Box>
-          <Box component="li">
-            <Link href={""}>
+            <Link href={"/events"}>
               <Typography
                 component="p"
                 sx={{
@@ -105,9 +92,24 @@ const Header = () => {
               </Typography>
             </Link>
           </Box>
+          {/* <Box component="li">
+            <Link href={""}>
+              <Typography
+                component="p"
+                sx={{
+                  "&:hover": {
+                    color: "blue",
+                  },
+                }}
+              >
+                Events
+              </Typography>
+            </Link>
+          </Box> */}
         </Stack>
         {/* <Box component="div"  sx={{marginLeft:{xs:"auto",md:"0"}}}> */}
         <ShoppingCartIcon fontSize="medium" sx={{ marginRight: "22px" }} />
+        <AvatarDropdown />
         <Button
           className="w-fit"
           style={{ padding: "0px 40px" }}
