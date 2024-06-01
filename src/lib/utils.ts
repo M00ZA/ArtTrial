@@ -45,21 +45,21 @@ export function formatNumber(num: number) {
   return Intl.NumberFormat().format(num)
 }
 
-// export function headers(token: string | undefined) {
-//   return {
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//     }
-//   }
-// }
-
 export function headers(token: string | undefined) {
   return {
     headers: {
-      accesstoken: `accesstoken_${token}`,
+      Authorization: `Bearer ${token}`,
     }
   }
 }
+
+// export function headers(token: string | undefined) {
+//   return {
+//     headers: {
+//       accesstoken: `accesstoken_${token}`,
+//     }
+//   }
+// }
 
 export function formatDate(date: string, format = {
   year: 'numeric',

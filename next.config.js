@@ -10,6 +10,7 @@ const nextConfig = {
     remotePatterns: [
       { hostname: 'artspacev2.cyclic.app' },
       { hostname: 'res.cloudinary.com' },
+      { hostname: 's3-alpha-sig.figma.com' },
     ],
   },
   transpilePackages: ['three'],

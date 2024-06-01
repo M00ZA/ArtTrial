@@ -52,6 +52,7 @@ export default function Login() {
       if (data?.data?.token) {
         toast.success("User found!");
         setCookie("token", data?.data?.token);
+        setCookie("type", "user");
         router.push("/");
         console.log("Hello From the other side");
       } else {

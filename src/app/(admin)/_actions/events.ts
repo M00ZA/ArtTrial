@@ -5,9 +5,19 @@ import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import { EditEventSchema } from "@/schema";
 
-export async function getEvents() {
+interface IParams{
+  page?:number,
+  limit?:number,
+  sort?:string,
+  "duration[lte]"?:number,
+  "duration[gte]"?:number
+}
+
+export async function getEvents(params: IParams|undefined) {
   const token = getCookie('token')
-  return await axios.get(useAPI(`events`), headers(token))
+  console.log("----------------------------------------------------------------")
+  console.log(token)
+  return await axios.get(useAPI(`events`), {...headers(token),params})
 }
 
 export async function getEvent(id: string) {

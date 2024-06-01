@@ -69,13 +69,15 @@ export type Event = {
   _id: string,
   title: string,
   description: string,
-  owner: { _id: string, name: string } ,
+  owner: { _id: string, name: string,
+    profileImg?:string } ,
   duration: number,
   began: string,
   end: string,
   products: Product[],
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  coverImage?:string
 }
 
 export type Category = {
