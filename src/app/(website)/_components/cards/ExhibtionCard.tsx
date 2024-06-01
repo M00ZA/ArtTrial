@@ -2,6 +2,7 @@ import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 import ScheduleIcon from "@mui/icons-material/Schedule";
 import EventIcon from "@mui/icons-material/Event";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   title: string;
@@ -9,6 +10,7 @@ interface IProps {
   date: string;
   name: string;
   imgUrl: string;
+  id: string;
 }
 
 export default function ExhibitionCard({
@@ -17,7 +19,9 @@ export default function ExhibitionCard({
   date,
   name,
   imgUrl,
+  id,
 }: IProps) {
+  const router = useRouter();
   return (
     <>
       <Box
@@ -30,6 +34,10 @@ export default function ExhibitionCard({
           backgroundColor: "#EDEDED",
           boxShadow: 2,
           flexShrink: 0,
+          cursor: "pointer",
+        }}
+        onClick={() => {
+          router.push(`/events/${id}`);
         }}
       >
         <Box

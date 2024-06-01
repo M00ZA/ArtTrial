@@ -53,7 +53,7 @@ export default function Login() {
         toast.success("User found!");
         setCookie("token", data?.data?.token);
         setCookie("type", "user");
-        router.push("/");
+        router.push("/home");
         console.log("Hello From the other side");
       } else {
         toast.error(data.response.data.error_msg);

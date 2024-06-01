@@ -42,7 +42,8 @@ export default function UserHome() {
               date={event.began}
               name={event.owner.name}
               imgUrl={event.coverImage || ""}
-              key={event._id}
+              key={event.id}
+              id={event.id}
             />
           ))}
       </SectionWrapper>

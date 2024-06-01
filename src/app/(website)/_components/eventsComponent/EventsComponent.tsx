@@ -30,7 +30,7 @@ export default function EventsComponent() {
     queryFn: () =>
       getEvents({
         page,
-        limit: 1,
+        limit: 20,
       }),
     placeholderData: keepPreviousData,
   });
@@ -79,16 +79,19 @@ export default function EventsComponent() {
         {isLoading && <div>Loading...</div>}
         {events &&
           events.length > 0 &&
-          events.map((event) => (
-            <ExhibitionCard
-              title={event.title}
-              range={`${event.duration} days`}
-              date={event.began}
-              name={event.owner.name}
-              imgUrl={event.coverImage || ""}
-              key={event._id}
-            />
-          ))}
+          events.map((event) => {
+            return (
+              <ExhibitionCard
+                title={event.title}
+                range={`${event.duration} days`}
+                date={event.began}
+                name={event.owner.name}
+                imgUrl={event.coverImage || ""}
+                key={event.id}
+                id={event.id}
+              />
+            );
+          })}
       </SectionWrapper>
     </>
   );

@@ -38,7 +38,7 @@ export type Admin = {
   name: string,
   userName: string,
   phone: string,
-  profileImg: Picture,
+  profileImg: string,
   gender: string,
   role: string,
   }
@@ -48,7 +48,7 @@ export type Picture = {
 }
 
 export type Product = {
-  _id: string,
+  id: string,
   title: string,
   description: string,
   price: number,
@@ -57,16 +57,16 @@ export type Product = {
   depth: string,
   material: string,
   isAvailable: boolean,
-  coverImage: Picture,
+  coverImage: string,
   images: Picture[],
   owner: { _id: string, name: string },
-  category: { _id: string, title: string },
+  category: string,
   style: { _id: string, title: string },
   subject: { _id: string, title: string },
 }
 
 export type Event = {
-  _id: string,
+
   title: string,
   description: string,
   owner: { _id: string, name: string,
@@ -77,7 +77,8 @@ export type Event = {
   products: Product[],
   createdAt: string,
   updatedAt: string,
-  coverImage?:string
+  coverImage?:string,
+  id:string
 }
 
 export type Category = {
