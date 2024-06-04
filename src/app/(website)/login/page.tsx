@@ -57,8 +57,10 @@ export default function Login() {
         setCookie("token", data?.data?.token);
         // refetch();
         localStorage.setItem("loggedInAs", type || "");
-
         router.push("/" + "?type=" + type);
+        // setTimeout(() => {
+        //   router.push("/" + "?type=" + type);
+        // }, 400);
       } else {
         toast.error(data.response.data.error_msg);
       }

@@ -11,6 +11,7 @@ function ArtistHomePlaceHolder() {
 }
 
 export default function HomeWrapper() {
+  const [isSSR, setSSR] = useState(true);
   // const router = useRouter();
   // const [loggedInAs, setLoggedInAs] = useState("");
   // const [memberProfile,setMemberProfile] = useState()
@@ -25,6 +26,14 @@ export default function HomeWrapper() {
   // }, []);
   // const { loggedInAs, memberProfile } = useLoggedInAs();
   // console.log(loggedInAs);
+
+  useEffect(() => {
+    setSSR(false);
+  }, []);
+
+  if (isSSR) {
+    return <h1>SSR</h1>;
+  }
 
   const loggedInAs = localStorage.getItem("loggedInAs");
   console.log(loggedInAs, "loggedinas");

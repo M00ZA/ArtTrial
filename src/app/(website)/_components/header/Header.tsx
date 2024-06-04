@@ -15,28 +15,48 @@ import { getUserEvents } from "@/actions/users";
 import { getProfile } from "@/actions/generic";
 import { AxiosError } from "axios";
 import { toast } from "sonner";
-import { setCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 import { User } from "@/types";
 const Header = () => {
   const [show, setShow] = useState(false);
+
+  const [signout, setSignout] = useState(false);
+
   const router = useRouter();
+
   const { type, endpoint } = useSearchType(
     "artists/getProfile",
     "users/getProfile"
   );
+
   console.log(type);
   const pathname = usePathname();
   const queryClient = useQueryClient();
 
   const memberType = type || "user";
+  console.log("memberType outside", memberType);
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: [memberType, "profile"] });
   }, [pathname]);
 
+  useEffect(() => {
+    console.log("memberType inside", memberType);
+    // queryClient.removeQueries({ queryKey: [memberType, "profile"] });
+    // queryClient.removeQueries();
+    // router.refresh();
+    const handleRemoveCacheAndDisableQuery = () => {
+      queryClient.resetQueries();
+      queryClient.removeQueries();
+    };
+    handleRemoveCacheAndDisableQuery();
+    router.refresh();
+  }, [signout]);
+
   const profileQuery = useQuery({
     queryKey: [memberType, "profile"],
     queryFn: () => getProfile(endpoint),
+    retry: false,
   });
 
   const { data, isError, isLoading, error, isFetched } = profileQuery;
@@ -49,6 +69,24 @@ const Header = () => {
     : undefined;
 
   let memberProfile: User = data?.data?.data;
+  console.log("memberProfile", memberProfile);
+  console.log("data", data?.data?.data);
+
+  // useEffect(() => {
+  //   if (
+  //     isError &&
+  //     (error as AxiosError)?.response?.status == 401 &&
+  //     pathname != "/"
+  //   ) {
+  //     // toast.error(
+  //     //   "You aren't logged in yet,You will be redirected to the login page"
+  //     // );
+  //     console.log("I erased ITtttttttttttttttttttttttttttttttttt");
+  //     // localStorage.setItem("loggedInAs", "");
+  //     localStorage.setItem("loggedInAs", "");
+  //     router.push(`/loginType`);
+  //   }
+  // }, [isError, error, pathname]);
 
   if (
     isError &&
@@ -62,15 +100,33 @@ const Header = () => {
     router.push(`/loginType`);
   }
 
-  if (isFetched) {
+  if (isFetched && !signout) {
     console.log(data?.data?.message);
 
     // setCookie("loggedInAs", loggedInAs);
-
+    console.log("isFetchedddddddddddddddddddd");
+    console.log("loggedInAs", loggedInAs);
     // setCookie("memberProfile", memberProfile);
-    localStorage.setItem("loggedInAs", loggedInAs || "");
+
+    !localStorage.getItem("loggedInAs") &&
+      localStorage.setItem("loggedInAs", loggedInAs || "");
     localStorage.setItem("memberProfile", JSON.stringify(memberProfile));
   }
+
+  function handleSignout() {
+    console.log("Sign out");
+
+    localStorage.setItem("loggedInAs", "");
+    localStorage.setItem("memberProfile", "");
+    deleteCookie("token");
+    // queryClient.invalidateQueries({ queryKey: [memberType, "profile"] });
+    setSignout(true);
+
+    console.log(
+      "_______________________________________________________________"
+    );
+  }
+
   console.log(pathname);
   return (
     <Stack
@@ -175,6 +231,7 @@ const Header = () => {
           imgUrl={memberProfile?.profileImg}
           name={memberProfile.name}
           email={memberProfile.email}
+          onSignout={handleSignout}
         />
       )}
       {memberProfile && (
@@ -185,6 +242,7 @@ const Header = () => {
           className="w-fit"
           style={{ padding: "0px 40px" }}
           onClick={() => {
+            setSignout(false);
             router.push("/loginType");
           }}
         >
