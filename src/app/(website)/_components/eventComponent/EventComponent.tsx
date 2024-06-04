@@ -1,16 +1,42 @@
 "use client";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import Image from "next/image";
 import VerticalCard from "../../_components/cards/VerticalCard";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { getEvent } from "@/app/(admin)/_actions/events";
-import { Event } from "@/types";
+import { Event, userBookedEvent } from "@/types";
 import { useParams, usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useGetUserEvents } from "@/hooks/useGetUserProfile";
+import { bookEvent, getUserEvents } from "@/actions/users";
+import { Loader } from "@/components/loader";
+import LandingLoader from "../landingLoader/landingLoader";
+import { toast } from "sonner";
+
+function getTime(isoDate: string) {
+  return new Date(isoDate).getTime;
+}
+
+function isDateWithingTwoDates(
+  dateToCheck: string,
+  beginDate: string,
+  endDate: string
+) {
+  const dateToCheckTime = getTime(dateToCheck);
+  const beginDateTime = getTime(beginDate);
+  const endDateTime = getTime(endDate);
+
+  return dateToCheckTime >= beginDateTime && dateToCheckTime < endDateTime;
+}
 
 export default function EventComponent() {
-  //   const router = useRouter();
+  const router = useRouter();
   //   const { id } = router.query;
   const { id } = useParams();
   const pathname = usePathname();
@@ -18,15 +44,79 @@ export default function EventComponent() {
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["events", id] });
+    queryClient.invalidateQueries({ queryKey: ["users", "bookEvent"] });
   }, [pathname]);
-  const eventQuery = useQuery({
-    queryKey: ["events", id],
-    queryFn: () => getEvent(id as string),
+
+  // const eventQuery = useQuery({
+  //   queryKey: ["events", id],
+  //   queryFn: () => getEvent(id as string),
+  // });
+
+  // const userEventQuery = useQuery({
+  //   queryKey: ["users", "bookEvent"],
+  //   queryFn: () => getUserEvents(),
+  // });
+
+  const userQueries = useQueries({
+    queries: [
+      {
+        queryKey: ["events", id],
+        queryFn: () => getEvent(id as string),
+      },
+      {
+        queryKey: ["users", "bookEvent"],
+        queryFn: () => getUserEvents(),
+      },
+    ],
   });
 
-  const event: Event = eventQuery.data?.data?.data;
-  console.log("myEvent");
-  console.log(eventQuery);
+  const bookEventMutation = useMutation({
+    mutationFn: bookEvent,
+    onSuccess: (d) => {
+      if (d.data?.code === 200) {
+        toast.success("Event booked successfully!");
+        return;
+      }
+      toast.error("Couldnot booked event!");
+      console.log(d);
+    },
+    onError: (d: any) => {
+      if (d?.response?.data?.message) {
+        toast.error(d?.response?.data?.message);
+      }
+    },
+  });
+
+  const eventBookingHandler = () => {
+    queryClient.invalidateQueries({ queryKey: ["events", id] });
+    queryClient.invalidateQueries({ queryKey: ["users", "bookEvent"] });
+    bookEventMutation.mutate();
+  };
+
+  // const user: userBookedEvent = userQueries
+  const { isLoading } = userQueries[0];
+  // const { isLoading: isUserLoading } = userQueries[1];
+  const event: Event = userQueries[0].data?.data?.data;
+  const user: userBookedEvent = userQueries[1].data?.data?.data;
+  const isBooked = user?.events.filter((e) => e.id == id).length > 0;
+  console.log(useQueries);
+
+  // const user: userBookedEvent = userEventQuery.data?.data?.data;
+  // console.log(user);
+  // const { isLoading: isUserLoading } = userEventQuery;
+  // const { isLoading } = eventQuery;
+  // const event: Event = eventQuery.data?.data?.data;
+  // console.log("myEvent");
+  // console.log(eventQuery);
+
+  if (isLoading) {
+    return <LandingLoader />;
+  }
+
+  if (!event) {
+    return <div>event not found!</div>;
+  }
+
   return (
     <>
       <Box
@@ -190,18 +280,44 @@ export default function EventComponent() {
               />
             ))}
         </Box>
-        {/* <Button
-          className="w-fit"
-          style={{ padding: "0px 40px" }}
-          onClick={() => {
-            //   router.push("/loginType");
-          }}
-          variant="contained"
-          color="success"
-          sx={{ background: "black" }}
-        >
-          Login
-        </Button> */}
+        <Box component="div" sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            className="w-fit"
+            style={{
+              padding: "1rem 0",
+              backgroundColor: "rgb(108 99 255 / 0.9)",
+              margin: "0 auto",
+              display: "inline-block",
+              width: "82%",
+            }}
+            onClick={() => {
+              //   router.push("/loginType");
+              // isBooked? router.push("/vr"):""
+              if (isBooked) {
+                router.push("/vr?e=" + id);
+                return;
+              }
+              eventBookingHandler();
+            }}
+            variant="contained"
+            color="success"
+            disabled={
+              isBooked
+                ? isDateWithingTwoDates(
+                    new Date().toISOString(),
+                    event?.began,
+                    event?.end
+                  )
+                : isDateWithingTwoDates(
+                    new Date().toISOString(),
+                    event?.createdAt,
+                    event?.began
+                  )
+            }
+          >
+            {isBooked ? "Launch VR Mode" : "Book Exhibtion"}
+          </Button>
+        </Box>
       </Box>
     </>
   );

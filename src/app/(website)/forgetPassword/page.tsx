@@ -21,11 +21,17 @@ import { Button } from "@/components/ui/button";
 
 import { Loader, LockKeyhole, User } from "lucide-react";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { useSearchType } from "@/hooks/useSearchParamsType";
 
 export default function ForgetPassword() {
   const router = useRouter();
+  const { type, endpoint } = useSearchType(
+    "artistAuth/forgotPassword",
+    "userAuth/forgotPassword"
+  );
+
   const form = useForm<Zod.infer<typeof forgetPassword>>({
     defaultValues: {
       email: "",
@@ -36,7 +42,7 @@ export default function ForgetPassword() {
   const forgotPasswordMutation = useMutation({
     mutationFn: (values: zod.infer<typeof forgetPassword>) =>
       axios
-        .post(`${API_URL}userAuth/forgotPassword`, values)
+        .post(`${API_URL}${endpoint}`, values)
         .then((d) => d.data)
         .catch((err) => err),
     onSuccess: (data, variable, context) => {
@@ -45,7 +51,7 @@ export default function ForgetPassword() {
       if (data?.code == 200) {
         toast.success("Reset code sent to email !");
         // setCookie("token", data?.data?.token);
-        router.push("/verifyReset");
+        router.push("/verifyReset" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);
       }
@@ -57,7 +63,7 @@ export default function ForgetPassword() {
   };
 
   return (
-    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-screen">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
           <h1 className="text-xl font-semibold uppercase mb-4">

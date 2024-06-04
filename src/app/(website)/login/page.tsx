@@ -52,9 +52,7 @@ export default function Login() {
       if (data?.data?.token) {
         toast.success("User found!");
         setCookie("token", data?.data?.token);
-        setCookie("type", "user");
-        router.push("/home");
-        console.log("Hello From the other side");
+        router.push("/" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);
       }
@@ -66,7 +64,7 @@ export default function Login() {
   };
 
   return (
-    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-screen">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
           <h1 className="text-3xl font-semibold uppercase mb-8">Login</h1>
@@ -119,7 +117,7 @@ export default function Login() {
                     </FormItem>
                   )}
                 />
-                <Link href={"/forgetPassword"}>
+                <Link href={"/forgetPassword" + "?type=" + type}>
                   <p className="text-primary">Forget password ?</p>
                 </Link>
 
@@ -134,7 +132,7 @@ export default function Login() {
                 </Button>
                 <p className="text-gray-400">
                   don't have an account?{" "}
-                  <Link href={"/register"}>
+                  <Link href={"/signup" + "?type=" + type}>
                     {" "}
                     <span className="text-primary">Register</span>
                   </Link>

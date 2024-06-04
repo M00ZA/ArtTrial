@@ -1,21 +1,21 @@
 export type User = {
-  _id: string,
+  id: string,
   name: string,
   email: string,
   phoneNumber: string,
   userName?: string,
-  profileImg?: Picture,
+  profileImg?: string,
   accountActive: boolean,
   addresses: Address[],
 }
 
 export type Artist = {
-  _id: string,
+  id: string,
   name: string,
   email: string,
   phone: string,
   userName?: string,
-  profileImg?: Picture,
+  profileImg?: string,
   accountActive: boolean,
   addresses: Address[],
 }
@@ -105,3 +105,21 @@ export type pageParams = {
   sortBy: "userName asc" | "userName desc";
 };
 
+export type userBookedEvent ={
+  id: string,
+  events: [
+      {
+          id: string,
+          title: string,
+          description: string,
+          duration: number,
+          began: string,
+          end: string,
+          isLaunch: boolean,
+          coverImage:string,
+          ownerId: string,
+          ownerName: string,
+          profileImg: string
+      }
+  ]
+}

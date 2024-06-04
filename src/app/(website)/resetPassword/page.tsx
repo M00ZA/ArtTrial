@@ -26,9 +26,14 @@ import { Loader, LockKeyhole, User } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useSearchType } from "@/hooks/useSearchParamsType";
 
 export default function Login() {
   const router = useRouter();
+  const { type, endpoint } = useSearchType(
+    "artistAuth/resetPassword",
+    "userAuth/resetPassword"
+  );
   const form = useForm<Zod.infer<typeof resetPassword>>({
     defaultValues: {
       email: "",
@@ -41,7 +46,7 @@ export default function Login() {
   const resetPasswordMutation = useMutation({
     mutationFn: (values: zod.infer<typeof resetPassword>) =>
       axios
-        .put(`${API_URL}userAuth/resetPassword`, values)
+        .put(`${API_URL}${endpoint}`, values)
         .then((d) => d.data)
         .catch((err) => err),
     onSuccess: (data, variable, context) => {
@@ -50,7 +55,7 @@ export default function Login() {
       if (data?.data?.token) {
         toast.success("Password changed successfully!");
         setCookie("token", data?.data?.token);
-        router.push("/");
+        router.push("/" + "?type=" + type);
         console.log("Hello From the other side");
       } else {
         toast.error(data.response.data.error_msg);

@@ -1,8 +1,13 @@
+"use client"
 import React,{useEffect,useState} from 'react';
 import Picture from '../Picture/Picture';
 import Display from '../Display/Display';
 import MyImg from "../Picture/MyImg"
 import axios from 'axios';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { getEvent } from '@/app/(admin)/_actions/events';
+import LandingLoader from '@/app/(website)/_components/landingLoader/landingLoader';
 
 
 const imgResObj = {
@@ -218,24 +223,37 @@ const displayProps = [{ position:[20, 5, 0], size:[1, 18, 11], id:1} ,
 ]
 
 const Art = () => {
-    const [imgRes, setImageRes] = useState({})
+    const searchParams = useSearchParams()
+    const pathname = usePathname();
+    const id = searchParams.get('e')
+    console.log(id)
+    console.log("idddddddd")
+    const queryClient = useQueryClient();
 
-    useEffect(() => {
-        const fetchImg = async () => {
-            // const res =  await axios.get("https://pixabay.com/api/?key=43588509-cce640375a7ae66ab5f3cd40d&q=yellow+flowers&image_type=photo&page=1&per_page=6");
-            const res =  await axios.get(`https://pixabay.com/api/?key=43588509-cce640375a7ae66ab5f3cd40d&q=yellow+flowers&image_type=photo&page=1&per_page=6`);
+  useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ["events", id] });
+  }, [pathname]);
 
-            // const res = {}
-            console.log(res?.data);
-            if(res?.data&&res?.data?.hits){
-                setImageRes(res.data)
-            }
-        }
+  const eventQuery = useQuery({
+    queryKey: ["events", id],
+    queryFn: () => getEvent(id),
+  });
+    const event = eventQuery.data?.data?.data;
+  console.log("myEvent");
+  console.log(event);
 
-        fetchImg();
-        
-    },[])
-    if(!imgRes?.hits){
+   const { isLoading } = eventQuery;
+
+//    if (isLoading) {
+//     return <LandingLoader />;
+//   }
+
+//   if (!event) {
+//     return <div>event not found!</div>;
+//   }
+
+
+      if(isLoading || !event){
         return <>
              <Picture 
             url={"assets/3D/Portrait/scene.gltf"}
@@ -249,11 +267,12 @@ const Art = () => {
     }
         </>
     }
-
-   const modifiedImgList = imgRes.hits.map((img,i) => ({
-    ...img,
+    
+   const modifiedImgList = event?.products &&
+   event?.products.map((product,i) => ({
+    ...product,
     ...extraMetaData[i],
-    url:img.largeImageURL
+    url:product.coverImage
    }))
    return(
    [ modifiedImgList.map(imgParams => <MyImg 
@@ -268,85 +287,141 @@ const Art = () => {
     displayProps.map(disProp =><Display position={disProp.position} size={disProp.size} key={disProp.id} /> )
     ]
    )
-  
-    return (
-        <>
-        {/* liam portrait */}
-        {/* <Picture 
-            url={"assets/3D/Portrait/scene.gltf"}
-            scale={[4, 4, 4]}
-            position={[19.3, 7, 0]}            
-            rotation={[0, -Math.PI, 0]}
-            metalness={0.9}
-            roughness={0.9}
-        /> */}
-        <Display position={[20, 5, 0]} size={[1, 18, 11]} />
+
+
+//------------------------------------------///
+//     const [imgRes, setImageRes] = useState({})
+
+//     useEffect(() => {
+//         const fetchImg = async () => {
+//             // const res =  await axios.get("https://pixabay.com/api/?key=43588509-cce640375a7ae66ab5f3cd40d&q=yellow+flowers&image_type=photo&page=1&per_page=6");
+//             const res =  await axios.get(`https://pixabay.com/api/?key=43588509-cce640375a7ae66ab5f3cd40d&q=yellow+flowers&image_type=photo&page=1&per_page=6`);
+
+//             // const res = {}
+//             console.log(res?.data);
+//             if(res?.data&&res?.data?.hits){
+//                 setImageRes(res.data)
+//             }
+//         }
+
+//         fetchImg();
+        
+//     },[])
+
+//     if(!imgRes?.hits){
+//         return <>
+//              <Picture 
+//             url={"assets/3D/Portrait/scene.gltf"}
+//             scale={[4, 4, 4]}
+//             position={[19.3, 7, 0]}            
+//             rotation={[0, -Math.PI, 0]}
+//             metalness={0.9}
+//             roughness={0.9}
+//         />
+//         { displayProps.map(disProp =><Display position={disProp.position} size={disProp.size} /> )
+//     }
+//         </>
+//     }
+
+//    const modifiedImgList = imgRes.hits.map((img,i) => ({
+//     ...img,
+//     ...extraMetaData[i],
+//     url:img.largeImageURL
+//    }))
+//    return(
+//    [ modifiedImgList.map(imgParams => <MyImg 
+//         url={imgParams.url}
+//         scale={imgParams.scale}
+//         position={imgParams.position}            
+//         rotation={imgParams.rotation}
+//         metalness={imgParams.metalness}
+//         roughness={imgParams.roughness}
+//         key={imgParams.id}
+//     />  ),
+//     displayProps.map(disProp =><Display position={disProp.position} size={disProp.size} key={disProp.id} /> )
+//     ]
+//    )
+
+//----------------------------------------///
+
+//     return (
+//         <>
+//         {/* liam portrait */}
+//         {/* <Picture 
+//             url={"assets/3D/Portrait/scene.gltf"}
+//             scale={[4, 4, 4]}
+//             position={[19.3, 7, 0]}            
+//             rotation={[0, -Math.PI, 0]}
+//             metalness={0.9}
+//             roughness={0.9}
+//         /> */}
+//         <Display position={[20, 5, 0]} size={[1, 18, 11]} />
            
-        {/* creation of adam */}
-        {/* <Picture 
-            url={"assets/3D/Hands/scene.gltf"}
-            scale={[0.1, 0.1, 0.1]}
-            position={[34.7, 12, 12]}            
-            rotation={[0, -Math.PI / 2, Math.PI]}
-            metalness={0}
-            roughness={0.9}
-        /> */}
+//         {/* creation of adam */}
+//         {/* <Picture 
+//             url={"assets/3D/Hands/scene.gltf"}
+//             scale={[0.1, 0.1, 0.1]}
+//             position={[34.7, 12, 12]}            
+//             rotation={[0, -Math.PI / 2, Math.PI]}
+//             metalness={0}
+//             roughness={0.9}
+//         /> */}
 
-<MyImg 
-            url={"https://picsum.photos/200/300"}
-            scale={[10, 10, 0]}
-            position={[34.7, 12, 12]}            
-            rotation={[0, -Math.PI / 2, 0]}
-            metalness={0}
-            roughness={0.9}
-        />
+// <MyImg 
+//             url={"https://picsum.photos/200/300"}
+//             scale={[10, 10, 0]}
+//             position={[34.7, 12, 12]}            
+//             rotation={[0, -Math.PI / 2, 0]}
+//             metalness={0}
+//             roughness={0.9}
+//         />
 
-        {/* wedding */}
-        <Picture 
-            url={"assets/3D/Wedding/scene.gltf"}
-            scale={[2.5, 2.5, 2.5]}
-            position={[19.3, 7, 25]}            
-            rotation={[Math.PI / 2, Math.PI, 0]}
-            metalness={0.0}
-            roughness={0.3}
-        />
-         <Display position={[20, 5, 25]} size={[1, 18, 11]} />
+//         {/* wedding */}
+//         <Picture 
+//             url={"assets/3D/Wedding/scene.gltf"}
+//             scale={[2.5, 2.5, 2.5]}
+//             position={[19.3, 7, 25]}            
+//             rotation={[Math.PI / 2, Math.PI, 0]}
+//             metalness={0.0}
+//             roughness={0.3}
+//         />
+//          <Display position={[20, 5, 25]} size={[1, 18, 11]} />
 
-        {/* wilson portrait */}
-         <Picture 
-            url={"assets/3D/Wilson/scene.gltf"}
-            scale={[2.5, 2.5, 2.5 ]}
-            position={[-19.3, 7, 0]}            
-            rotation={[-Math.PI / 2, 0, 0]}
-            metalness={0}
-            roughness={0.3}
-        />
-         <Display position={[-20, 5, 0]} size={[1, 18, 11]} />
+//         {/* wilson portrait */}
+//          <Picture 
+//             url={"assets/3D/Wilson/scene.gltf"}
+//             scale={[2.5, 2.5, 2.5 ]}
+//             position={[-19.3, 7, 0]}            
+//             rotation={[-Math.PI / 2, 0, 0]}
+//             metalness={0}
+//             roughness={0.3}
+//         />
+//          <Display position={[-20, 5, 0]} size={[1, 18, 11]} />
 
-        {/* old man portrait */}
-        <Picture 
-            url={"assets/3D/OldMan/scene.gltf"}
-            scale={[4, 4, 4]}
-            position={[-19.4, 7, 25]}            
-            rotation={[0, 0, 0]}
-            metalness={0.9}
-            roughness={0.9}
-        />
-         <Display position={[-20, 5, 25]} size={[1, 18, 11]} />
+//         {/* old man portrait */}
+//         <Picture 
+//             url={"assets/3D/OldMan/scene.gltf"}
+//             scale={[4, 4, 4]}
+//             position={[-19.4, 7, 25]}            
+//             rotation={[0, 0, 0]}
+//             metalness={0.9}
+//             roughness={0.9}
+//         />
+//          <Display position={[-20, 5, 25]} size={[1, 18, 11]} />
 
-         {/* girl portrait */}
-         <Picture 
-            url={"assets/3D/Girl/scene.gltf"}
-            scale={[6.5, 6.5, 6.5]}
-            position={[-34.6, 10, 12]}            
-            rotation={[-Math.PI / 2, 0, 0]}
-            metalness={0.7}
-            roughness={0.8}
-        />
+//          {/* girl portrait */}
+//          <Picture 
+//             url={"assets/3D/Girl/scene.gltf"}
+//             scale={[6.5, 6.5, 6.5]}
+//             position={[-34.6, 10, 12]}            
+//             rotation={[-Math.PI / 2, 0, 0]}
+//             metalness={0.7}
+//             roughness={0.8}
+//         />
          
-    </>
+//     </>
 
-    )
+//     )
   }
 
   export default Art;

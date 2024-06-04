@@ -64,7 +64,7 @@ export default function Signup() {
       console.log(variable);
       if (data?.code == 201) {
         toast.success("signup successfully, verify your email");
-        router.push("/verifyEmail");
+        router.push("/verifyEmail" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);
       }
@@ -76,7 +76,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-screen">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
           <h1 className="text-3xl font-semibold uppercase mb-8">Register</h1>

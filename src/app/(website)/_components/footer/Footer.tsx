@@ -13,8 +13,9 @@ const Footer = () => {
       spacing={2}
       sx={{
         padding: "12px",
-        // position: "absolute",
+        // position: "sticky",
         // bottom: "0",
+        // maxHeight: "250px",
         width: "100%",
         // height: "400p",
         // alignItems: "center",
@@ -25,12 +26,13 @@ const Footer = () => {
         direction="column"
         sx={{ flexBasis: { xs: "100%", md: "50%" }, paddingLeft: "30px" }}
       >
-        <Image alt="Logo" src="/logo.png" width={150} height={50} />
+        <Image alt="Logo" src="/logo.png" width={100} height={50} />
         <Typography
           component="p"
           variant="h6"
           maxWidth="370px"
           paddingLeft={{ xs: "10px", md: "80px" }}
+          fontSize=".9rem"
         >
           Virtual art gallery app provides art enhusiasts and users with a
           seamless and immersive experience
@@ -43,51 +45,45 @@ const Footer = () => {
       >
         <Stack component="ul" direction="column" sx={{ flexBasis: "50%" }}>
           <Box component="li">
-            <Link href={""}>
-              <Typography
-                component="p"
-                variant="body1"
-                sx={{
-                  "&:hover": {
-                    color: "blue",
-                  },
-                }}
-              >
-                help
-              </Typography>
-            </Link>
+            <Typography
+              component="p"
+              variant="body1"
+              sx={{
+                "&:hover": {
+                  color: "blue",
+                },
+              }}
+            >
+              <Link href={""}>help</Link>
+            </Typography>
           </Box>
 
           <Box component="li">
-            <Link href={""}>
-              <Typography
-                component="p"
-                variant="body1"
-                sx={{
-                  "&:hover": {
-                    color: "blue",
-                  },
-                }}
-              >
-                contact us
-              </Typography>
-            </Link>
+            <Typography
+              component="p"
+              variant="body1"
+              sx={{
+                "&:hover": {
+                  color: "blue",
+                },
+              }}
+            >
+              <Link href={""}> contact us</Link>
+            </Typography>
           </Box>
 
           <Box component="li">
-            <Link href={""}>
-              <Typography
-                component="p"
-                variant="body1"
-                sx={{
-                  "&:hover": {
-                    color: "blue",
-                  },
-                }}
-              >
-                FAQ
-              </Typography>
-            </Link>
+            <Typography
+              component="p"
+              variant="body1"
+              sx={{
+                "&:hover": {
+                  color: "blue",
+                },
+              }}
+            >
+              <Link href={""}> FAQ</Link>
+            </Typography>
           </Box>
         </Stack>
         <Box component="div" sx={{ flexBasis: "50%" }}>

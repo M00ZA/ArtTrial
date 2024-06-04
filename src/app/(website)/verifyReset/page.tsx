@@ -23,9 +23,14 @@ import { Loader, LockKeyhole, User } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useSearchType } from "@/hooks/useSearchParamsType";
 
 export default function VerifyReset() {
   const router = useRouter();
+  const { type, endpoint } = useSearchType(
+    "artistAuth/verifyCode",
+    "userAuth/verifyCode"
+  );
   const form = useForm<Zod.infer<typeof verifyReset>>({
     defaultValues: {
       email: "",
@@ -36,7 +41,7 @@ export default function VerifyReset() {
   const verifyResetMutation = useMutation({
     mutationFn: (values: zod.infer<typeof verifyReset>) =>
       axios
-        .post(`${API_URL}userAuth/verifyCode`, values)
+        .post(`${API_URL}${endpoint}`, values)
         .then((d) => d.data)
         .catch((err) => err),
     onSuccess: (data, variable, context) => {
@@ -45,7 +50,7 @@ export default function VerifyReset() {
       if (data?.code == 200) {
         toast.success("you can change password now !");
         // setCookie("token", data?.data?.token);
-        // router.push("/verifyReset");
+        router.push("/resetPassword" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);
       }
@@ -57,7 +62,7 @@ export default function VerifyReset() {
   };
 
   return (
-    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-screen">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
           <h1 className="text-xl font-semibold uppercase mb-4">

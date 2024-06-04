@@ -89,34 +89,16 @@
   }
 }
 
-/* html {
-  @apply h-full;
-} */
-/* body {
-  @apply h-full;
-} */
-/* div#__next {
-  @apply h-full;
-}
-main {
-  @apply h-full;
-} */
-
-/* html,body,main{
-  height: 100%;
-} */
-
 html {
-  @apply h-dvh;
+  @apply h-full;
 }
 body {
-  /* @apply min-h-full flex flex-col; */
-  @apply min-h-full ;
+  @apply h-full;
 }
-
 div#__next {
   @apply h-full;
 }
 main {
   @apply h-full;
 }
+

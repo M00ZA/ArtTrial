@@ -19,13 +19,13 @@ const MemberType = ({ type }: IProps) => {
       justifyContent="center"
       alignItems="center"
       display="flex"
-      height="100%"
+      height="100vh"
     >
       <Box
         component="div"
         sx={{
-          width: "80%",
-          height: "80%",
+          width: { xs: "90%", lg: "80%" },
+          height: { xs: "98%", lg: "80%" },
           border: "1px solid grey",
           borderRadius: "20px",
           display: "flex",
@@ -33,6 +33,7 @@ const MemberType = ({ type }: IProps) => {
           justifyContent: "center",
           flexDirection: "column",
           gap: 2,
+          padding: "22px",
         }}
       >
         <Typography component="h1" variant="h4" textAlign="center">
@@ -40,7 +41,11 @@ const MemberType = ({ type }: IProps) => {
             ? "Login as a User or Artist"
             : "Join as a User or Artist"}
         </Typography>
-        <Stack direction="row" spacing={4} marginBottom="12px">
+        <Stack
+          direction={{ xs: "column", lg: "row" }}
+          spacing={4}
+          marginBottom="12px"
+        >
           <MemberTypeCard
             img="/signup-type-user.svg"
             txt="I am a User"
