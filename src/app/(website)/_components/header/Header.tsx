@@ -55,18 +55,21 @@ const Header = () => {
     (error as AxiosError)?.response?.status == 401 &&
     pathname != "/"
   ) {
-    toast.error(
-      "You aren't logged in yet,You will be redirected to the login page"
-    );
+    // toast.error(
+    //   "You aren't logged in yet,You will be redirected to the login page"
+    // );
+    localStorage.setItem("loggedInAs", "");
     router.push(`/loginType`);
   }
 
   if (isFetched) {
     console.log(data?.data?.message);
 
-    setCookie("loggedInAs", loggedInAs);
+    // setCookie("loggedInAs", loggedInAs);
 
-    setCookie("memberProfile", memberProfile);
+    // setCookie("memberProfile", memberProfile);
+    localStorage.setItem("loggedInAs", loggedInAs || "");
+    localStorage.setItem("memberProfile", JSON.stringify(memberProfile));
   }
   console.log(pathname);
   return (

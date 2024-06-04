@@ -27,6 +27,7 @@ import { Loader, LockKeyhole, User } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import { useLoggedInAs } from "@/hooks/useLoggedInAs";
 
 export default function Login() {
   const router = useRouter();
@@ -40,6 +41,8 @@ export default function Login() {
     resolver: zodResolver(userLoginSchema),
   });
 
+  // const refetch = useLoggedInAs(endpoint, type);
+
   const loginMutation = useMutation({
     mutationFn: (values: zod.infer<typeof userLoginSchema>) =>
       axios
@@ -50,8 +53,11 @@ export default function Login() {
       console.log(data);
       console.log(variable);
       if (data?.data?.token) {
-        toast.success("User found!");
+        // toast.success("User found!");
         setCookie("token", data?.data?.token);
+        // refetch();
+        localStorage.setItem("loggedInAs", type || "");
+
         router.push("/" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);
