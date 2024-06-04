@@ -7,7 +7,7 @@ import { EditProductSchema, EditUserSchema } from "@/schema";
 import { IPaginationParams } from '@/types';
 
 
-export async function getProducts(params: IPaginationParams|undefined) {
+export async function getProducts(params: IPaginationParams|undefined={}) {
   const token = getCookie('token')
   return await axios.get(useAPI(`products`), {...headers(token),params})
 }

@@ -24,7 +24,7 @@ export const ViewProductComponent = () => {
   });
 
   const product: Product = productQuery?.data?.data?.data?.product;
-  const [current, setCurrent] = useState(product?.coverImage);
+  const [current, setCurrent] = useState(product?.coverImage?.image);
 
   console.log(current);
 
@@ -47,7 +47,7 @@ export const ViewProductComponent = () => {
         <section className="w-[600px]">
           <div className="mb-4 rounded-md flex items-center justify-center mb-2">
             <Image
-              src={current ?? product?.coverImage}
+              src={current ?? product?.coverImage?.image}
               alt="Logo"
               width={300}
               height={300}
@@ -57,7 +57,7 @@ export const ViewProductComponent = () => {
           <div className="flex gap-2 justify-center">
             {product?.images?.map((image: Picture, idx) => (
               <Image
-                onClick={() => setCurrent((old) => image?.secure_url)}
+                onClick={() => setCurrent(() => image?.secure_url)}
                 className={cn(
                   "rounded-md",
                   current === image?.secure_url && "border-2 border-primary",
@@ -124,13 +124,13 @@ export const ViewProductComponent = () => {
             <div className="flex justify-between items-center py-2">
               <div>Style</div>
               <div className="font-bold">
-                {product?.style?.title ?? "Not-Available"}
+                {product?.style ?? "Not-Available"}
               </div>
             </div>
             <div className="flex justify-between items-center py-2">
               <div>Subject</div>
               <div className="font-bold">
-                {product?.subject?.title ?? "Not-Available"}
+                {product?.subject ?? "Not-Available"}
               </div>
             </div>
           </section>

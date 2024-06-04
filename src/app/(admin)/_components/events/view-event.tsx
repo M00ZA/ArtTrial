@@ -98,7 +98,7 @@ export const ViewEventComponent = () => {
                   ) : (
                     <span>
                       <Link
-                        href={`/admin/artists/${owner?._id}/view`}
+                        href={`/admin/artists/${owner?.id}/view`}
                         className="text-blue-700 hover:underline"
                       >
                         {owner?.name}
@@ -119,81 +119,84 @@ export const ViewEventComponent = () => {
         <div className="xl:grid grid-cols-4 mt-2 gap-3">
           {event?.products?.length > 0 ? (
             <>
-              {event?.products?.map((product: Product) => (
-                <div className="bg-gray-50/10 border rounded-sm p-2">
-                  <h3 className="text-center capitalize font-semibold">
-                    {product?.title}
-                  </h3>
-                  <ul>
-                    <li className="text-sm flex justify-between py-2 px-4">
-                      <span>ID</span>{" "}
-                      <span>
-                        <Link
-                          href={`/admin/products/${product?.id}`}
-                          className="text-blue-600"
-                        >
-                          View Product
-                        </Link>
-                      </span>
-                    </li>
-                    <li className="text-sm flex justify-between py-2 px-4">
-                      <span>Price</span>{" "}
-                      <span className="text-green-600 font-bold">
-                        {formatMoney(product?.price)}
-                      </span>
-                    </li>
-                    <li className="text-sm flex justify-between py-2 px-4">
-                      <span>Category</span> <span>{product?.category}</span>
-                    </li>
-                    <li className="text-sm flex justify-between py-2 px-4">
-                      <span>Subject</span>{" "}
-                      <span>{product?.subject?.title}</span>
-                    </li>
-                    {product?.style && (
+              {event?.products?.map(
+                (
+                  product: Omit<Product, "coverImage"> & { coverImage: string }
+                ) => (
+                  <div className="bg-gray-50/10 border rounded-sm p-2">
+                    <h3 className="text-center capitalize font-semibold">
+                      {product?.title}
+                    </h3>
+                    <ul>
                       <li className="text-sm flex justify-between py-2 px-4">
-                        <span>Style</span> <span>{product?.style?.title}</span>
+                        <span>ID</span>{" "}
+                        <span>
+                          <Link
+                            href={`/admin/products/${product?.id}`}
+                            className="text-blue-600"
+                          >
+                            View Product
+                          </Link>
+                        </span>
                       </li>
+                      <li className="text-sm flex justify-between py-2 px-4">
+                        <span>Price</span>{" "}
+                        <span className="text-green-600 font-bold">
+                          {formatMoney(product?.price)}
+                        </span>
+                      </li>
+                      <li className="text-sm flex justify-between py-2 px-4">
+                        <span>Category</span> <span>{product?.category}</span>
+                      </li>
+                      <li className="text-sm flex justify-between py-2 px-4">
+                        <span>Subject</span> <span>{product?.subject}</span>
+                      </li>
+                      {product?.style && (
+                        <li className="text-sm flex justify-between py-2 px-4">
+                          <span>Style</span> <span>{product?.style}</span>
+                        </li>
+                      )}
+                    </ul>
+                    {adminLoading ? (
+                      <div className="grid grid-cols-3 gap-1">
+                        <Skeleton className="h-[40px]" />
+                        <Skeleton className="h-[40px]" />
+                        <Skeleton className="h-[40px]" />
+                      </div>
+                    ) : (
+                      <div className="pt-2 grid grid-cols-3 gap-1 flex-wrap px-4">
+                        <Link href={`/admin/products/${product?.id}/edit`}>
+                          <Button
+                            className="w-full text-xs"
+                            variant="outline"
+                            size="sm"
+                          >
+                            Edit
+                          </Button>
+                        </Link>
+                        <Link href={`/admin/products/${product?.id}/view`}>
+                          <Button
+                            className="w-full text-xs"
+                            variant="outline"
+                            size="sm"
+                          >
+                            View
+                          </Button>
+                        </Link>
+                        <Link href={`/admin/products/${product?.id}/delete`}>
+                          <Button
+                            className="w-full text-xs"
+                            variant="outline"
+                            size="sm"
+                          >
+                            Delete
+                          </Button>
+                        </Link>
+                      </div>
                     )}
-                  </ul>
-                  {adminLoading ? (
-                    <div className="grid grid-cols-3 gap-1">
-                      <Skeleton className="h-[40px]" />
-                      <Skeleton className="h-[40px]" />
-                      <Skeleton className="h-[40px]" />
-                    </div>
-                  ) : (
-                    <div className="pt-2 grid grid-cols-3 gap-1 flex-wrap px-4">
-                      <Link href={`/admin/products/${product?.id}/edit`}>
-                        <Button
-                          className="w-full text-xs"
-                          variant="outline"
-                          size="sm"
-                        >
-                          Edit
-                        </Button>
-                      </Link>
-                      <Link href={`/admin/products/${product?.id}/view`}>
-                        <Button
-                          className="w-full text-xs"
-                          variant="outline"
-                          size="sm"
-                        >
-                          View
-                        </Button>
-                      </Link>
-                      <Link href={`/admin/products/${product?.id}/delete`}>
-                        <Button
-                          className="w-full text-xs"
-                          variant="outline"
-                          size="sm"
-                        >
-                          Delete
-                        </Button>
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              ))}
+                  </div>
+                )
+              )}
             </>
           ) : (
             <div>0 products found</div>

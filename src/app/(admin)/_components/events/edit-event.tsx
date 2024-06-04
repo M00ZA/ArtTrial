@@ -76,10 +76,11 @@ export const EditEventComponent = () => {
 
   const event: Event = getEventQuery.data?.data?.data?.event;
   const products: Product[] = allProducts.data?.data?.data?.products.filter(
-    (p: Product) => p?.owner?._id === event?.owner?._id
+    (p: Product) => p?.owner?.id === event?.owner?._id
   );
   const eventProducts: string[] = event?.products?.map(
-    (product: Product) => product.id
+    (product: Omit<Product, "coverImage"> & { coverImage: string }) =>
+      product?.id
   );
 
   const [selectedProducts, setSelectedProducts] =

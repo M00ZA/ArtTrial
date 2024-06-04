@@ -74,7 +74,7 @@ export type Event = {
   duration: number,
   began: string,
   end: string,
-  products: Partial<Product>&{coverImage:string}[],
+  products:Array<Omit<Product,"coverImage">&{coverImage:string}>,
   createdAt: string,
   updatedAt: string,
   coverImage?:string,

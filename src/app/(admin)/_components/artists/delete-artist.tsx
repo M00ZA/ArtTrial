@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 // Nextjs
 import Link from "next/link";
@@ -18,55 +18,61 @@ import { toast } from "sonner";
 import { useGetArtist } from "@/hooks/useGetArtist";
 
 export const DeleteArtistComponent = () => {
+  const { id } = useParams();
+  const { artist, isLoading } = useGetArtist(id as string);
 
-  const { id } = useParams()
-  const { artist, isLoading } = useGetArtist(id as string)
-
-  const queryClient = useQueryClient()
-  const router = useRouter()
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => deleteArtist(id),
     onSuccess: (d) => {
-      toast.success("Artist deleted!")
-      queryClient.invalidateQueries({ queryKey: ['artists'] })
-      router.push('/admin/artists')
-    }
-  })
+      toast.success("Artist deleted!");
+      queryClient.invalidateQueries({ queryKey: ["artists"] });
+      router.push("/admin/artists");
+    },
+  });
 
   const deleteArtistHandler = () => {
-    deleteMutation.mutate(id as string)
-  }
+    deleteMutation.mutate(id as string);
+  };
 
   if (isLoading) {
-    return (
-      <DeleteArtistComponent.Loading />
-    )
+    return <DeleteArtistComponent.Loading />;
   }
 
   if (!artist) {
-    return (
-      <div>
-        Artist not found!
-      </div>
-    )
+    return <div>Artist not found!</div>;
   }
 
   return (
     <div>
       <div className="w-[50%]">
-        <PageTitle icon={Trash} label={<span className='flex items-center gap-2'>Delete Artist <Link className='text-sm text-gray-400 font-normal' href={`/admin/artists/${artist?._id}`}>/{artist?.name} ({artist.email})</Link></span>} />
-        <DeleteAction 
+        <PageTitle
+          icon={Trash}
+          label={
+            <span className="flex items-center gap-2">
+              Delete Artist{" "}
+              <Link
+                className="text-sm text-gray-400 font-normal"
+                href={`/admin/artists/${artist?.id}`}
+              >
+                /{artist?.name} ({artist.email})
+              </Link>
+            </span>
+          }
+        />
+        <DeleteAction
           icon={Trash}
           cancelRoute="/admin/artists"
-          title={'Are you sure that you want to delete this artist?'}
-          description='Once you click delete, then confirm you will not be able to reverse this data!'
+          title={"Are you sure that you want to delete this artist?"}
+          description="Once you click delete, then confirm you will not be able to reverse this data!"
           confirmAction={deleteArtistHandler}
         />
       </div>
     </div>
   );
-}
+};
 
 DeleteArtistComponent.Loading = () => {
   return (
@@ -74,10 +80,7 @@ DeleteArtistComponent.Loading = () => {
       <PageTitle icon={Trash} label="Delete Artist" />
       <DeleteActionSkeleton />
     </div>
-  )
-}
+  );
+};
 
-DeleteArtistComponent.Error404 = () => {
-  
-}
- 
+DeleteArtistComponent.Error404 = () => {};
