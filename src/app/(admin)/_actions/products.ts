@@ -4,10 +4,12 @@ import axios from "axios";
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import { EditProductSchema, EditUserSchema } from "@/schema";
+import { IPaginationParams } from '@/types';
 
-export async function getProducts() {
+
+export async function getProducts(params: IPaginationParams|undefined) {
   const token = getCookie('token')
-  return await axios.get(useAPI(`products`), headers(token))
+  return await axios.get(useAPI(`products`), {...headers(token),params})
 }
 
 export async function getProduct(id: string) {

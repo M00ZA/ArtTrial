@@ -110,8 +110,8 @@ html {
   @apply h-dvh;
 }
 body {
-  /* @apply min-h-full flex flex-col; */
-  @apply min-h-full ;
+  @apply min-h-full flex flex-col;
+  /* @apply min-h-full ; */
 }
 
 div#__next {

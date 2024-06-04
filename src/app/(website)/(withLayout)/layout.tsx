@@ -1,13 +1,14 @@
-import EventsComponent from "../_components/eventsComponent/EventsComponent";
 import Footer from "../_components/footer/Footer";
 import Header from "../_components/header/Header";
 
-export default function Events() {
+const WithLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <Header />
-      <EventsComponent />
+      {children}
       <Footer />
     </>
   );
-}
+};
+
+export default WithLayout;

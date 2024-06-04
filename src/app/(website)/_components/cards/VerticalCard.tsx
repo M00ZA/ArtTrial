@@ -22,7 +22,8 @@ export default function VerticalCard({
         overflow: "hidden",
         // maxWidth: "180px",
         width: "300px",
-        borderRadius: "12px 12px 0 0",
+        borderRadius: "12px 12px 6px 6px",
+        boxShadow: 1,
       }}
     >
       <Box component="div" borderBottom="1px solid gray" height={"200px"}>
@@ -35,7 +36,7 @@ export default function VerticalCard({
         <img
           src={imgUrl || "/services-1.svg"}
           alt="img"
-          style={{ height: "100%" }}
+          style={{ height: "100%", width: "100%" }}
         />
       </Box>
       <Box

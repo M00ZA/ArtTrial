@@ -7,18 +7,20 @@ import GoogleIcon from "@mui/icons-material/Google";
 import Link from "next/link";
 const Footer = () => {
   return (
+    // <div style={{ position: "relative", backgroundColor: "gray" }}>
     <Stack
       component="footer"
       direction="row"
       spacing={2}
       sx={{
         padding: "12px",
-        // position: "sticky",
-        // bottom: "0",
+        // position: "absolute",
+        bottom: "0",
         // maxHeight: "250px",
         width: "100%",
         // height: "400p",
         // alignItems: "center",
+        marginTop: "auto",
       }}
     >
       <Stack
@@ -107,6 +109,7 @@ const Footer = () => {
         </Box>
       </Stack>
     </Stack>
+    // </div>
   );
 };
 

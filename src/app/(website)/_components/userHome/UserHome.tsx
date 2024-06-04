@@ -6,6 +6,7 @@ import { getEvents } from "@/app/(admin)/_actions/events";
 import { Event } from "@/types";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import LandingLoader from "../landingLoader/landingLoader";
 
 export default function UserHome() {
   const pathname = usePathname();
@@ -28,11 +29,15 @@ export default function UserHome() {
   const events: Event[] = data?.data?.data?.events;
   console.log(events);
 
+  if (isLoading) {
+    return <LandingLoader />;
+  }
+
   return (
     <>
       <SectionWrapper txt="Explore Events" seeMore="/events">
         {isError && <div>Something went wrong please try again later</div>}
-        {isLoading && <div>Loading...</div>}
+        {/* {isLoading && <LandingLoader />} */}
         {events &&
           events.length > 0 &&
           events.map((event) => (

@@ -11,6 +11,7 @@ import { Event } from "@/types";
 import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import LandingLoader from "../landingLoader/landingLoader";
 
 export default function EventsComponent() {
   const pathname = usePathname();
@@ -66,6 +67,10 @@ export default function EventsComponent() {
   const events: Event[] = data?.data?.data?.events;
   console.log(events);
 
+  if (isLoading) {
+    return <LandingLoader />;
+  }
+
   return (
     <>
       <SectionWrapper
@@ -76,7 +81,6 @@ export default function EventsComponent() {
         handleChange={handleChange}
       >
         {isError && <div>Something went wrong please try again later</div>}
-        {isLoading && <div>Loading...</div>}
         {events &&
           events.length > 0 &&
           events.map((event) => {

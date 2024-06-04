@@ -170,15 +170,15 @@
 // }
 
 import EventComponent from "@/app/(website)/_components/eventComponent/EventComponent";
-import Header from "../../_components/header/Header";
-import Footer from "../../_components/footer/Footer";
+import Header from "../../../_components/header/Header";
+import Footer from "../../../_components/footer/Footer";
 
 export default function EventView() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <EventComponent />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

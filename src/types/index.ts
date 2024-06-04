@@ -57,12 +57,12 @@ export type Product = {
   depth: string,
   material: string,
   isAvailable: boolean,
-  coverImage: string,
+  coverImage: {imageId:string,image:string},
   images: Picture[],
-  owner: { _id: string, name: string },
+  owner: { id: string, name: string },
   category: string,
-  style: { _id: string, title: string },
-  subject: { _id: string, title: string },
+  style: string,
+  subject: string,
 }
 
 export type Event = {
@@ -74,7 +74,7 @@ export type Event = {
   duration: number,
   began: string,
   end: string,
-  products: Product[],
+  products: Partial<Product>&{coverImage:string}[],
   createdAt: string,
   updatedAt: string,
   coverImage?:string,
@@ -122,4 +122,12 @@ export type userBookedEvent ={
           profileImg: string
       }
   ]
+}
+
+export type IPaginationParams = {
+  page?:number,
+  limit?:number,
+  sort?:string,
+  "duration[lte]"?:number,
+  "duration[gte]"?:number
 }

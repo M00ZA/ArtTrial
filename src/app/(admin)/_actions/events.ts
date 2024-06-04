@@ -4,16 +4,10 @@ import axios from "axios";
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import { EditEventSchema } from "@/schema";
+import { IPaginationParams } from '@/types';
 
-interface IParams{
-  page?:number,
-  limit?:number,
-  sort?:string,
-  "duration[lte]"?:number,
-  "duration[gte]"?:number
-}
 
-export async function getEvents(params: IParams|undefined) {
+export async function getEvents(params: IPaginationParams|undefined) {
   const token = getCookie('token')
   console.log("----------------------------------------------------------------")
   console.log(token)
