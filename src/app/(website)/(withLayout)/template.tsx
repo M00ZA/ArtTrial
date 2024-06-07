@@ -1,7 +1,7 @@
 import Footer from "../_components/footer/Footer";
 import Header from "../_components/header/Header";
 
-const WithLayout = ({ children }: { children: React.ReactNode }) => {
+export default function Template({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
@@ -9,6 +9,4 @@ const WithLayout = ({ children }: { children: React.ReactNode }) => {
       <Footer />
     </>
   );
-};
-
-export default WithLayout;
+}

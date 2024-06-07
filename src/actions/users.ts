@@ -7,7 +7,7 @@ export async function getUserEvents() {
     return await axios.get(useAPI(`bookEvent`), headers(token))
   }
 
-  export async function bookEvent() {
+  export async function bookEvent(id:string) {
     const token = getCookie('token')
-    return await axios.post(useAPI(`bookEvent`), headers(token))
+    return await axios.post(useAPI(`bookEvent/${id}`),null, headers(token))
   }

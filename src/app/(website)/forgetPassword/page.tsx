@@ -53,7 +53,10 @@ export default function ForgetPassword() {
         // setCookie("token", data?.data?.token);
         router.push("/verifyReset" + "?type=" + type);
       } else {
-        toast.error(data.response.data.error_msg);
+        // toast.error(data.response.data.error_msg);
+        if (data?.response?.data?.message) {
+          toast.error(data?.response?.data?.message);
+        }
       }
     },
   });
@@ -91,7 +94,6 @@ export default function ForgetPassword() {
                             {...field}
                             placeholder="email"
                             className="pl-12"
-                            type="number"
                           />
                         </div>
                       </FormControl>

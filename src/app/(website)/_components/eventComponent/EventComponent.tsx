@@ -74,7 +74,12 @@ export default function EventComponent() {
     mutationFn: bookEvent,
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("Event booked successfully!");
+        toast.success("Event booked successfully!", {
+          onAutoClose(toast) {
+            router.refresh();
+          },
+        });
+
         return;
       }
       toast.error("Couldnot booked event!");
@@ -90,7 +95,7 @@ export default function EventComponent() {
   const eventBookingHandler = () => {
     queryClient.invalidateQueries({ queryKey: ["events", id] });
     queryClient.invalidateQueries({ queryKey: ["users", "bookEvent"] });
-    bookEventMutation.mutate();
+    bookEventMutation.mutate(id as string);
   };
 
   // const user: userBookedEvent = userQueries
