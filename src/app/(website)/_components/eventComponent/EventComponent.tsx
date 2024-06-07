@@ -281,7 +281,8 @@ export default function EventComponent() {
                 title={product.title}
                 name={product.owner.name}
                 category={product.category}
-                key={event.id}
+                key={product.id}
+                id={product.id}
               />
             ))}
         </Box>

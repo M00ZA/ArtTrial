@@ -51,6 +51,7 @@ export default function VerifyEmail() {
       if (data?.data?.token) {
         toast.success("email verified!");
         setCookie("token", data?.data?.token);
+        localStorage.setItem("loggedInAs", type || "");
         router.push("/" + "?type=" + type);
       } else {
         toast.error(data.response.data.error_msg);

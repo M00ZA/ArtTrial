@@ -68,7 +68,7 @@ export default function Login() {
   };
 
   return (
-    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full h-full">
+    <div className="grid grid-rows-2 grid-cols-1 lg:grid-rows-1 lg:grid-cols-2 gap-4 w-full min-h-screen">
       <div className="bg-gray-100 flex flex-col items-center justify-center">
         <div className="w-[300px]">
           <h1 className="text-xl font-semibold uppercase mb-4">

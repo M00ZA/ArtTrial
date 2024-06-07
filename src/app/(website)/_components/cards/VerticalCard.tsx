@@ -1,11 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 interface IProps {
   imgUrl: string;
   title: string;
   name: string;
   category: string;
+  id: string;
 }
 
 export default function VerticalCard({
@@ -13,7 +15,9 @@ export default function VerticalCard({
   title,
   name,
   category,
+  id,
 }: IProps) {
+  const router = useRouter();
   return (
     <Box
       component="div"
@@ -24,6 +28,10 @@ export default function VerticalCard({
         width: "300px",
         borderRadius: "12px 12px 6px 6px",
         boxShadow: 1,
+        cursor: "pointer",
+      }}
+      onClick={() => {
+        router.push(`/gallery/${id}`);
       }}
     >
       <Box component="div" borderBottom="1px solid gray" height={"200px"}>

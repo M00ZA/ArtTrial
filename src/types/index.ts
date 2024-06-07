@@ -63,6 +63,7 @@ export type Product = {
   category: string,
   style: string,
   subject: string,
+  size:string
 }
 
 export type Event = {
@@ -131,3 +132,23 @@ export type IPaginationParams = {
   "duration[lte]"?:number,
   "duration[gte]"?:number
 }
+
+export type Cart ={
+  id: string,
+  itemCount:number,
+  user:{
+    id:string,
+    name: string
+  },
+  totalCartPrice:number,
+
+  cartItems: Array<CartItem>
+}
+
+export type CartItem ={
+  product:Product,
+  price:number
+}
+
+
+

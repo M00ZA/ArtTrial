@@ -248,6 +248,7 @@ export default function GalleryComponent() {
             name={product.owner.name}
             category={product.category}
             key={product.id}
+            id={product.id}
           />
         ))}
     </SectionWrapper>

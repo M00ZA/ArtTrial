@@ -12,6 +12,7 @@ export default function Services() {
         position={"relative"}
         paddingBottom={"20px"}
         lineHeight={"4rem"}
+        fontSize={"1.6rem"}
         sx={{
           "&::after": {
             content: '""',

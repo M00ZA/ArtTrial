@@ -37,7 +37,7 @@ export default function ServiceItem({ reverse, src, txt }: IProps) {
           component="p"
           variant="h4"
           maxWidth={"380px"}
-          fontSize={{ xs: "27px", md: "38px" }}
+          fontSize="22px"
         >
           {txt}
         </Typography>
