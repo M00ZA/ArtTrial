@@ -17,7 +17,7 @@ import "./globals.css";
 //   }
 // );
 
-export default async function Home() {
+export default function Home() {
   return (
     <>
       <Header />

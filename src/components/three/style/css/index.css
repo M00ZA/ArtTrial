@@ -5,17 +5,26 @@
   src: url("./fonts/Sacramento-Regular.ttf");
 }
 
-#root,
+/* #root,
 body,
 html,
-canvas {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+div#__next,
+main,
+canvas{
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+} */
+
+canvas{
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-body {
+.body {
   position: fixed;
   overflow: hidden;
   overscroll-behavior-y: none;
@@ -26,6 +35,10 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh !important;
+  width: 100vw !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .overlay {

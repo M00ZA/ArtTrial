@@ -32,7 +32,7 @@ export default function HomeWrapper() {
   }, []);
 
   if (isSSR) {
-    return <h1>SSR</h1>;
+    return <Home />;
   }
 
   const loggedInAs = localStorage.getItem("loggedInAs");

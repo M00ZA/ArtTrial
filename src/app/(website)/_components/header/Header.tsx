@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Stack from "@mui/material/Stack";
 import Link from "next/link";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useEffect, useState } from "react";
@@ -36,9 +36,9 @@ const Header = () => {
   const memberType = type || "user";
   console.log("memberType outside", memberType);
 
-  useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: [memberType, "profile"] });
-  }, [pathname]);
+  // useEffect(() => {
+  //   queryClient.invalidateQueries({ queryKey: [memberType, "profile"] });
+  // }, [pathname]);
 
   useEffect(() => {
     console.log("memberType inside", memberType);
@@ -226,28 +226,63 @@ const Header = () => {
           </Box> */}
       </Stack>
       {/* <Box component="div"  sx={{marginLeft:{xs:"auto",md:"0"}}}> */}
-      {memberProfile && (
-        <AvatarDropdown
-          imgUrl={memberProfile?.profileImg}
-          name={memberProfile.name}
-          email={memberProfile.email}
-          onSignout={handleSignout}
-        />
-      )}
-      {memberProfile && (
-        <ShoppingCartIcon fontSize="medium" sx={{ marginRight: "22px" }} />
-      )}
-      {!memberProfile && (
-        <Button
-          className="w-fit"
-          style={{ padding: "0px 40px" }}
-          onClick={() => {
-            setSignout(false);
-            router.push("/loginType");
-          }}
-        >
-          Login
-        </Button>
+      {isLoading && type ? (
+        <CircularProgress />
+      ) : (
+        <>
+          {memberProfile && (
+            <AvatarDropdown
+              imgUrl={memberProfile?.profileImg}
+              name={memberProfile.name}
+              email={memberProfile.email}
+              onSignout={handleSignout}
+            />
+          )}
+          {memberProfile && (
+            <ShoppingCartIcon fontSize="medium" sx={{ marginRight: "22px" }} />
+          )}
+          {!memberProfile && (
+            // <Button
+            //   className="w-fit"
+            //   style={{ padding: "0px 40px" }}
+            //   onClick={(e) => {
+            //     console.log("clicked");
+            //     e.preventDefault();
+            //     setSignout(false);
+            //     setTimeout(() => {
+            //       router.push("/loginType");
+            //     }, 300);
+            //   }}
+            // >
+            //   Login
+            // </Button>
+            <Box
+              component="div"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log("btn link clicked");
+                setSignout(false);
+              }}
+            >
+              <Link href={"/loginType"}>
+                <Typography
+                  component="p"
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "rgb(108 99 255 / 90%)",
+                    },
+                    background: "rgb(108 99 255)",
+                    color: "white",
+                    padding: "8px 14px",
+                    borderRadius: "8px",
+                  }}
+                >
+                  Login
+                </Typography>
+              </Link>
+            </Box>
+          )}
+        </>
       )}
 
       {/* </Box> */}

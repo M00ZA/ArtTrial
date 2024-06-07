@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import "./style/css/index.css";
+// import "./style/css/index.css";
 import App from "./components/App/App";
 import Loading from "./components/Loading/Loading";
+import LandingLoader from "@/app/(website)/_components/landingLoader/landingLoader";
 
 const Overlay = () => {
   const [ready, setReady] = useState(false);
+  const [ssr, setSSR] = useState(true);
 
   useEffect(() => {
     const handleLockchange = () => {
@@ -22,8 +24,15 @@ const Overlay = () => {
     };
   });
 
+  useEffect(() => {
+    setSSR(false);
+  }, []);
+  if (ssr) {
+    return <LandingLoader />;
+  }
+
   return (
-    <>
+    <div className="body">
       <App />
       <div className={ready ? "" : "overlay"}>
         <div className={"start"}>Click to Explore</div>
@@ -45,7 +54,7 @@ const Overlay = () => {
       </div>
       <div className="dot" style={{ pointerEvents: ready ? "none" : "all" }} />
       <Loading />
-    </>
+    </div>
   );
 };
 
