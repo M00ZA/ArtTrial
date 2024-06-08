@@ -45,6 +45,7 @@ const Header = () => {
     // queryClient.removeQueries({ queryKey: [memberType, "profile"] });
     // queryClient.removeQueries();
     // router.refresh();
+    toast.dismiss();
     const handleRemoveCacheAndDisableQuery = () => {
       queryClient.resetQueries();
       queryClient.removeQueries();

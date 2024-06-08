@@ -34,7 +34,7 @@ export default function RootLayout({ children }: LayoutProps) {
       >
         <ReactQueryProvider>
           <StoreProvider>
-            <Toaster position="top-center" richColors />
+            {/* <Toaster position="top-center" richColors /> */}
             {children}
           </StoreProvider>
         </ReactQueryProvider>

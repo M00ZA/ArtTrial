@@ -20,8 +20,12 @@ export default function ArtWorkDetails() {
   console.log("myid", id);
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["events", id] });
-    queryClient.invalidateQueries({ queryKey: ["users", "bookEvent"] });
+    queryClient.invalidateQueries({
+      queryKey: ["products", id],
+      refetchType: "all",
+    });
+    queryClient.invalidateQueries({ queryKey: ["cart"], refetchType: "all" });
+    toast.dismiss();
   }, [pathname]);
 
   // const eventQuery = useQuery({
@@ -50,13 +54,16 @@ export default function ArtWorkDetails() {
   const addCartMutation = useMutation({
     mutationFn: addProductToCart,
     onSuccess: (d) => {
-      if (d.data?.code === 200) {
-        toast.success("proudct added to cart successfully!", {
-          onAutoClose(toast) {
-            router.refresh();
-          },
+      if (d.data?.code === 201) {
+        toast.success("proudct added to cart successfully!");
+        queryClient.invalidateQueries({
+          queryKey: ["products", id],
+          refetchType: "all",
         });
-
+        queryClient.invalidateQueries({
+          queryKey: ["cart"],
+          refetchType: "all",
+        });
         return;
       }
       toast.error("Couldnot add product to cart!");
@@ -70,8 +77,6 @@ export default function ArtWorkDetails() {
   });
 
   const addToCartHandler = () => {
-    queryClient.invalidateQueries({ queryKey: ["products", id] });
-    queryClient.invalidateQueries({ queryKey: ["cart"] });
     addCartMutation.mutate(id as string);
   };
 

@@ -74,11 +74,7 @@ export default function EventComponent() {
     mutationFn: bookEvent,
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("Event booked successfully!", {
-          onAutoClose(toast) {
-            router.refresh();
-          },
-        });
+        toast.success("Event booked successfully!");
 
         return;
       }
