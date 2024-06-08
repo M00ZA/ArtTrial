@@ -57,13 +57,13 @@ export const ViewProductComponent = () => {
           <div className="flex gap-2 justify-center">
             {product?.images?.map((image: Picture, idx) => (
               <Image
-                onClick={() => setCurrent(() => image?.secure_url)}
+                onClick={() => setCurrent(() => image?.image)}
                 className={cn(
                   "rounded-md",
-                  current === image?.secure_url && "border-2 border-primary",
+                  current === image?.image && "border-2 border-primary",
                   "hover:scale-110 transition-all"
                 )}
-                src={image.secure_url}
+                src={image.image}
                 alt="Logo"
                 width={80}
                 height={80}

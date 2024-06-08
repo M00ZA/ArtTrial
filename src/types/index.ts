@@ -43,9 +43,7 @@ export type Admin = {
   role: string,
   }
 
-export type Picture = {
-  public_id: string, secure_url: string
-}
+export type Picture = {imageId:string,image:string}
 
 export type Product = {
   id: string,

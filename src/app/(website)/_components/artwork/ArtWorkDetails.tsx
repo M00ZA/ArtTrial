@@ -1,4 +1,5 @@
 "use client";
+import "../carousel/embla.css";
 import { Avatar, Box, Button, Stack, Typography } from "@mui/material";
 import PropertyTagItem from "./PropertTagItem";
 import LandingLoader from "../landingLoader/landingLoader";
@@ -9,6 +10,8 @@ import { getProduct } from "@/app/(admin)/_actions/products";
 import { addProductToCart, getMyCart } from "@/actions/users";
 import { toast } from "sonner";
 import { Cart, Product } from "@/types";
+import EmblaCarousel from "../carousel/EmblaCarousel";
+import { EmblaOptionsType } from "embla-carousel";
 
 export default function ArtWorkDetails() {
   const router = useRouter();
@@ -98,6 +101,10 @@ export default function ArtWorkDetails() {
   // const event: Event = eventQuery.data?.data?.data;
   // console.log("myEvent");
   // console.log(eventQuery);
+
+  const OPTIONS: EmblaOptionsType = {};
+  // const SLIDE_COUNT = 5
+  // const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
 
   if (isLoading) {
     return <LandingLoader />;
@@ -264,11 +271,24 @@ export default function ArtWorkDetails() {
             margin: "0 auto",
           }}
         >
-          <img
+          {/* <img
             src={product?.coverImage?.image || "/services-1.svg"}
             alt="img"
             style={{ height: "100%", width: "100%" }}
-          />
+          /> */}
+          {/*product?.images && product.images.length > 0 && (
+            <Carousel>
+              {product.images.map((product, i) => (
+                <div key={product?.imageId}>
+                  <img src={product?.image} />
+                  <p className="legend">{`Legend ${i}`}</p>
+                </div>
+              ))}
+            </Carousel>
+          )*/}
+          {product?.images && product.images.length > 0 && (
+            <EmblaCarousel slides={product?.images} options={OPTIONS} />
+          )}
         </Box>
       </Stack>
     </Box>

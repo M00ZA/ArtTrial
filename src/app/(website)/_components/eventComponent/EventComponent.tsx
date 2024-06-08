@@ -43,8 +43,14 @@ export default function EventComponent() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["events", id] });
-    queryClient.invalidateQueries({ queryKey: ["users", "bookEvent"] });
+    queryClient.invalidateQueries({
+      queryKey: ["events", id],
+      refetchType: "all",
+    });
+    queryClient.invalidateQueries({
+      queryKey: ["users", "bookEvent"],
+      refetchType: "all",
+    });
   }, [pathname]);
 
   // const eventQuery = useQuery({
@@ -75,7 +81,14 @@ export default function EventComponent() {
     onSuccess: (d) => {
       if (d.data?.code === 200) {
         toast.success("Event booked successfully!");
-
+        queryClient.invalidateQueries({
+          queryKey: ["events", id],
+          refetchType: "all",
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["users", "bookEvent"],
+          refetchType: "all",
+        });
         return;
       }
       toast.error("Couldnot booked event!");
