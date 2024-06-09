@@ -149,3 +149,10 @@ export const verifyEmail = z.object({
   email: z.string().min(1, { message: "email cannot be empty" }),
   activateCode:  z.string().min(1, { message: "activate code cannot be empty" }),
 }) 
+
+export const cartPay = z.object({
+  address: z.string().min(1, { message: "please select an address" }),
+  pay:  z.string().min(1, { message: "please provide a payment method" }),
+}) 
+
+// (shippingAddress: string, productId: string)

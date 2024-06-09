@@ -21,8 +21,7 @@ export type Artist = {
 }
 
 export type Address = {
-  _id: string,
-  address: string,
+  id: string,
   alias: string,
   street: string,
   region: string,
@@ -150,3 +149,24 @@ export type CartItem ={
 
 
 
+export type Order  =   {
+  "id": string,
+  "user": {
+      "id": string,
+      "name": string
+  },
+  "cartItems": [
+      {
+          "product": Product
+          "price": number
+      }
+  ],
+  "totalOrderPrice": number,
+  "paymentMethodType": string,
+  "currency": string,
+  "isPaid": boolean,
+  "paidAt": string|null,
+  "orderState": string,
+  "isDelivered": boolean,
+  "deliveredAt": string|null
+}
