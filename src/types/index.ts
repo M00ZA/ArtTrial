@@ -170,3 +170,5 @@ export type Order  =   {
   "isDelivered": boolean,
   "deliveredAt": string|null
 }
+
+export type OrderById = Order&{shippingAddress:Address}

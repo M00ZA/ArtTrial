@@ -240,7 +240,12 @@ const Header = () => {
             />
           )}
           {memberProfile && (
-            <ShoppingCartIcon fontSize="medium" sx={{ marginRight: "22px" }} />
+            <Link href="/cart">
+              <ShoppingCartIcon
+                fontSize="medium"
+                sx={{ marginRight: "22px" }}
+              />
+            </Link>
           )}
           {!memberProfile && (
             // <Button

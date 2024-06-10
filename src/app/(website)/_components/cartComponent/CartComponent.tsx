@@ -47,6 +47,7 @@ import {
 } from "@/actions/users";
 import { useEffect } from "react";
 import { Address, Cart } from "@/types";
+import LandingLoader from "../landingLoader/landingLoader";
 
 export default function CartComponent() {
   const router = useRouter();
@@ -116,6 +117,11 @@ export default function CartComponent() {
     addCashMutation.mutate(form.getValues());
     console.log(form.getValues());
   };
+
+  const { isLoading } = cartQuery;
+  if (isLoading) {
+    return <LandingLoader />;
+  }
 
   if (!cart) {
     return <h1>No cart found</h1>;

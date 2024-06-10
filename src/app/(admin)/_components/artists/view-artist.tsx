@@ -123,7 +123,7 @@ export const ViewArtistComponent = () => {
                 {artist.addresses?.length > 0 && (
                   <div className="divide-y">
                     {artist.addresses.map((address: Address) => (
-                      <div className="py-2" key={address._id}>
+                      <div className="py-2" key={address.id}>
                         <h4 className="flex items-center text-xl gap-2">
                           <span>
                             {address.country} / {address.city}

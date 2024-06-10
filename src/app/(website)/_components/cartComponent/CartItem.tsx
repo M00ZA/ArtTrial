@@ -11,9 +11,17 @@ interface IProps {
   name: string;
   price: string;
   id: string;
+  noAction?: boolean;
 }
 
-export default function CartItem({ imgUrl, name, price, title, id }: IProps) {
+export default function CartItem({
+  imgUrl,
+  name,
+  price,
+  title,
+  id,
+  noAction,
+}: IProps) {
   const queryClient = useQueryClient();
   const removeItemMutation = useMutation({
     mutationFn: (values: { id: string }) => deleteCartProduct(values.id),
@@ -114,24 +122,26 @@ export default function CartItem({ imgUrl, name, price, title, id }: IProps) {
             <MonetizationOnIcon />
             {price}
           </Typography>
-          <Button
-            className="w-fit"
-            style={{
-              // padding: "1rem 0",
-              backgroundColor: "rgb(108 99 255 / 0.9)",
-              // margin: "0 auto",
-              // display: "inline-block",
-              // width: "100%",
-            }}
-            onClick={(e) => {
-              e.preventDefault();
-              removeFromCartHandler();
-            }}
-            variant="contained"
-            color="success"
-          >
-            Remove
-          </Button>
+          {!noAction && (
+            <Button
+              className="w-fit"
+              style={{
+                // padding: "1rem 0",
+                backgroundColor: "rgb(108 99 255 / 0.9)",
+                // margin: "0 auto",
+                // display: "inline-block",
+                // width: "100%",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                removeFromCartHandler();
+              }}
+              variant="contained"
+              color="success"
+            >
+              Remove
+            </Button>
+          )}
         </Stack>
       </Stack>
     </Stack>
