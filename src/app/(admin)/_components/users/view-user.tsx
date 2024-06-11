@@ -75,7 +75,7 @@ export const ViewUserComponent = () => {
           <span className="flex gap-2 items-center">
             <Smartphone className="size-4" /> Phone Number
           </span>
-          <span>{user?.phoneNumber}</span>
+          <span>{user?.phone}</span>
         </li>
         <li className="flex justify-between items-center py-1">
           <span className="flex gap-2 items-center">

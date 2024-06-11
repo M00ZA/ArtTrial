@@ -123,8 +123,20 @@ export default function CartComponent() {
     return <LandingLoader />;
   }
 
-  if (!cart) {
-    return <h1>No cart found</h1>;
+  if (!cart || !cart?.cartItems || cart?.cartItems.length < 0) {
+    return (
+      <Box
+        component="div"
+        sx={{
+          display: "flex",
+          minHeight: "80vh",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <h1>No cart found</h1>
+      </Box>
+    );
   }
 
   return (

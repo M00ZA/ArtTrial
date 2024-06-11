@@ -66,8 +66,8 @@ export const EditUserComponent = () => {
   console.log(user);
   const form = useForm({
     defaultValues: {
-      userName: user?.userName ? user.userName : "",
-      phoneNumber: user?.phoneNumber ?? user?.phoneNumber,
+      name: user?.name ? user.name : "",
+      phone: user?.phone ?? user?.phone,
       // profileImg: ''
     },
     resolver: zodResolver(EditUserSchema),
@@ -81,8 +81,8 @@ export const EditUserComponent = () => {
 
   useEffect(() => {
     if (user) {
-      form.setValue("userName", user?.userName || "");
-      form.setValue("phoneNumber", user?.phoneNumber);
+      form.setValue("name", user?.name || "");
+      form.setValue("phone", user?.phone);
     }
   }, [user]);
 
@@ -134,7 +134,7 @@ export const EditUserComponent = () => {
 
             <FormField
               control={form.control}
-              name="userName"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Full-Name</FormLabel>
@@ -154,13 +154,13 @@ export const EditUserComponent = () => {
 
             <FormField
               control={form.control}
-              name="phoneNumber"
+              name="phone"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
                     <Input
-                      defaultValue={user?.phoneNumber}
+                      defaultValue={user?.phone}
                       {...field}
                       type="text"
                       placeholder="Phone Number"

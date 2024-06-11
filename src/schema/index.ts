@@ -1,3 +1,4 @@
+import { Phone } from 'lucide-react';
 import * as z from 'zod'
 
 const MAX_FILE_SIZE = 5000000;
@@ -9,8 +10,8 @@ export const AdminLoginSchema = z.object({
 }) 
 
 export const EditUserSchema = z.object({
-  userName: z.string().min(1, { message: "Name of User is required!" }),
-  phoneNumber: z.string().min(1, { message: "Phone number is required!" }).regex(/^01[0-2,5]{1}[0-9]{8}$/, { message: 'Invalid Egyptian number!' }),
+  name: z.string().min(1, { message: "Name of User is required!" }),
+  phone: z.string().min(1, { message: "Phone number is required!" }).regex(/^01[0-2,5]{1}[0-9]{8}$/, { message: 'Invalid Egyptian number!' }),
   // profileImg: z.any()
 })
 
@@ -156,3 +157,21 @@ export const cartPay = z.object({
 }) 
 
 // (shippingAddress: string, productId: string)
+
+export const UpdateUserProfile= z.object({
+  name: z.string().optional()
+    .or(z.literal('')),
+  // .min(1, { message: "Name of user is required!" }),
+  phone: z.string().optional()
+    .or(z.literal('')),
+  // .min(1, { message: "Phone number is required!" }).regex(/^01[0-2,5]{1}[0-9]{8}$/, { message: 'Invalid Egyptian number!' }),
+  email: z.string().optional()
+    .or(z.literal('')),
+  // .min(1, { message: "email cannot be empty" }),
+  profileImg: z.any()
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Select a picture (Max Size: 5MB).`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
+})

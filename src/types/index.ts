@@ -2,7 +2,7 @@ export type User = {
   id: string,
   name: string,
   email: string,
-  phoneNumber: string,
+  phone: string,
   userName?: string,
   profileImg?: string,
   accountActive: boolean,

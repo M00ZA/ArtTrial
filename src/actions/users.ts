@@ -1,4 +1,5 @@
 import { headers, useAPI } from "@/lib/utils"
+import { User } from "@/types"
 import axios from "axios"
 import { getCookie } from "cookies-next"
 
@@ -50,4 +51,10 @@ export async function getUserEvents() {
   export async function deleteCartProduct(id:string) {
     const token = getCookie('token')
     return await axios.delete(useAPI(`cart/${id}`), headers(token))
+  }
+
+  // users/updateProfile
+  export async function updateUserProfile(userProfile:Partial<User>) {
+    const token = getCookie('token')
+    return await axios.patchForm(useAPI(`users/updateProfile`),userProfile, headers(token))
   }
