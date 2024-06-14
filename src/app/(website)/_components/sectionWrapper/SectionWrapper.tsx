@@ -10,6 +10,7 @@ interface IProps {
   count?: number;
   page?: number;
   handleChange?: (event: ChangeEvent<unknown>, page: number) => void;
+  noBottomBorder?: boolean;
 }
 export default function SectionWrapper({
   txt,
@@ -19,6 +20,7 @@ export default function SectionWrapper({
   page,
   handleChange,
   children,
+  noBottomBorder,
 }: PropsWithChildren<IProps>) {
   return (
     <>
@@ -26,7 +28,7 @@ export default function SectionWrapper({
         component="section"
         sx={{
           padding: "20px",
-          borderBottom: "2px solid #DBB97B",
+          borderBottom: noBottomBorder ? "" : "2px solid #DBB97B",
         }}
       >
         <SectionHeader txt={txt} />

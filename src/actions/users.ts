@@ -1,7 +1,9 @@
 import { headers, useAPI } from "@/lib/utils"
+import { UpdateMyAdminPassword } from "@/schema"
 import { User } from "@/types"
 import axios from "axios"
 import { getCookie } from "cookies-next"
+import * as z from 'zod'
 
 export async function getUserEvents() {
     const token = getCookie('token')
@@ -56,5 +58,17 @@ export async function getUserEvents() {
   // users/updateProfile
   export async function updateUserProfile(userProfile:Partial<User>) {
     const token = getCookie('token')
-    return await axios.patchForm(useAPI(`users/updateProfile`),userProfile, headers(token))
+    return await axios.patch(useAPI(`users/updateProfile`),userProfile, headers(token))
   }
+
+
+  export async function updateUserImg(values: any) {
+    const token = getCookie('token')
+    return await axios.putForm(useAPI(`users/updateImage`), values, headers(token))
+  }
+
+  export async function updateUserPassword(values: z.infer<typeof UpdateMyAdminPassword>) {
+    const token = getCookie('token')
+    return await axios.patch(useAPI(`users/changePassword`), values, headers(token))
+  }
+  

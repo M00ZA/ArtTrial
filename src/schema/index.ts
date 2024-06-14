@@ -175,3 +175,13 @@ export const UpdateUserProfile= z.object({
     "Only .jpg, .jpeg, .png and .webp formats are supported."
   ),
 })
+
+export const userAddressSchema =  z.object({
+  alias: z.string().min(1, { message: "alias cannot be empty" }),
+  country: z.string().min(1, { message: "country cannot be empty "}),
+  phone: z.string().min(1, { message: "Phone number is required!" }),
+  region: z.string().min(1, { message: "region cannot be empty "}),
+  city: z.string().min(1, { message: "city cannot be empty "}),
+  street: z.string().min(1, { message: "street cannot be empty "}),
+  postalCode: z.string().min(1, { message: "postalCode cannot be empty "}),
+})

@@ -50,9 +50,12 @@ import {
   UpdateMyAdminPassword,
   UpdateUserProfile,
 } from "@/schema";
-import { updateUserProfile } from "@/actions/users";
+import { updateUserImg, updateUserProfile } from "@/actions/users";
 import { User } from "@/types";
 import { getProfile } from "@/actions/generic";
+import { updateAdminPicture } from "@/app/(admin)/_actions/admins";
+import LandingLoader from "../landingLoader/landingLoader";
+import { Box } from "@mui/material";
 
 const ProfilePageComponent = () => {
   const pathname = usePathname();
@@ -79,22 +82,32 @@ const ProfilePageComponent = () => {
 
   const [pic, setPic] = useState<File>();
 
-  //   const changeImageMutation = useMutation({
-  //     mutationFn: (image: any) => updateAdminPicture(image),
-  //     onSuccess: (res: any) => {
-  //       if (res.data?.code === 200) {
-  //         toast.success(res.data?.message);
-  //         router.push("/user/profile");
-  //         refetch();
-  //         return;
-  //       }
-  //     },
-  //     onError: (d: any) => {
-  //       if (d?.response?.data?.message) {
-  //         toast.error(d?.response?.data?.message);
-  //       }
-  //     },
-  //   });
+  const changeImageMutation = useMutation({
+    mutationFn: (values: { profileImg: string }) => updateUserImg(values),
+    onSuccess: (res: any) => {
+      if (res.data?.code === 200) {
+        // toast.success(res.data?.message);
+        // refetch();
+        toast.success("Image updated successfully!");
+        queryClient.invalidateQueries({
+          queryKey: ["users", "profile"],
+          refetchType: "all",
+        });
+        setPic(undefined);
+        toast.dismiss();
+        // router.push("/profile");
+        queryClient.resetQueries();
+        queryClient.removeQueries();
+
+        return;
+      }
+    },
+    onError: (d: any) => {
+      if (d?.response?.data?.message) {
+        toast.error(d?.response?.data?.message);
+      }
+    },
+  });
 
   const updateMutation = useMutation({
     mutationFn: (values: zod.infer<typeof UpdateUserProfile>) =>
@@ -108,7 +121,7 @@ const ProfilePageComponent = () => {
           queryKey: ["users", "profile"],
           refetchType: "all",
         });
-        setPic(undefined);
+        // setPic(undefined);
         toast.dismiss();
         // refetch();
         // router.push("/profile");
@@ -147,7 +160,13 @@ const ProfilePageComponent = () => {
 
   const updateUserHandler = () => {
     console.log(form.getValues());
-    updateMutation.mutate(form.getValues());
+    const userBasicInfo = {
+      name: form.getValues().name,
+      phone: form.getValues().phone,
+      email: form.getValues().email,
+    };
+    updateMutation.mutate(userBasicInfo);
+    changeImageMutation.mutate({ profileImg: form.getValues().profileImg });
   };
 
   useEffect(() => {
@@ -343,11 +362,23 @@ const ProfilePageComponent = () => {
 };
 
 ProfilePageComponent.Error = () => {
-  return <div>Error</div>;
+  return (
+    <Box
+      component="div"
+      sx={{
+        display: "flex",
+        minHeight: "80vh",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div>Something went wrong please try again later</div>
+    </Box>
+  );
 };
 
 ProfilePageComponent.Loading = () => {
-  return <div>Loading</div>;
+  return <LandingLoader />;
 };
 
 export default ProfilePageComponent;

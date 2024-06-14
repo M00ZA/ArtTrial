@@ -50,7 +50,7 @@ export default function AvatarDropdown({
             </li>
             <li>
               <Link
-                href={"/addresses"}
+                href={"/profile/address"}
                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
                 Addresses
@@ -58,7 +58,7 @@ export default function AvatarDropdown({
             </li>
             <li>
               <Link
-                href={"/changepassword"}
+                href={"/profile/changePassword"}
                 className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
               >
                 Change Password
