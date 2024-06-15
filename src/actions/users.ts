@@ -85,3 +85,18 @@ export async function getUserEvents() {
     const token = getCookie('token')
     return await axios.get(useAPI(`auction`), {...headers(token),params})
   }
+
+  export async function getAuctionDetails(id:string) {
+    const token = getCookie('token')
+    return await axios.get(useAPI(`auction/product/${id}`), headers(token))
+  }
+
+  export async function updateAuctionPrice(id:string,finalPrice:string) {
+    const token = getCookie('token')
+    return await axios.patch(useAPI(`auction/${id}/updatePrice`),{finalPrice}, headers(token))
+  }
+
+  export async function registerAuction(id:string) {
+    const token = getCookie('token')
+    return await axios.get(useAPI(`registerAuction/checkoutSession/${id}`), headers(token))
+  }

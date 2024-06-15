@@ -3,10 +3,15 @@ import SectionWrapper from "../sectionWrapper/SectionWrapper";
 import ExhibitionCard from "../cards/ExhibtionCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getEvents } from "@/app/(admin)/_actions/events";
-import { Event } from "@/types";
+import { Auction, Event, Product } from "@/types";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import LandingLoader from "../landingLoader/landingLoader";
+import { getProducts } from "@/app/(admin)/_actions/products";
+import VerticalCard from "../cards/VerticalCard";
+import { getAuctions } from "@/actions/users";
+import VerticalGenericCard from "../cards/VerticalGenericCard";
+import AuctionTxt from "../auctionComponent/AuctionTxt";
 
 export default function UserHome() {
   const pathname = usePathname();
@@ -25,8 +30,28 @@ export default function UserHome() {
       }),
   });
 
+  const productsQuery = useQuery({
+    queryKey: ["products"],
+    queryFn: () =>
+      getProducts({
+        page: 1,
+        limit: 3,
+      }),
+  });
+
+  const auctionQuery = useQuery({
+    queryKey: ["auctions"],
+    queryFn: () =>
+      getAuctions({
+        page: 1,
+        limit: 3,
+      }),
+  });
+
   const { isLoading, data, isError } = eventsQuery;
   const events: Event[] = data?.data?.data?.events;
+  const products: Product[] = productsQuery?.data?.data?.data?.products;
+  const auctions: Auction[] = auctionQuery?.data?.data?.data?.auctions;
   console.log(events);
 
   if (isLoading) {
@@ -50,6 +75,42 @@ export default function UserHome() {
               key={event.id}
               id={event.id}
             />
+          ))}
+      </SectionWrapper>
+      <SectionWrapper txt="Explore Gallery" seeMore="/gallery">
+        {products &&
+          products.map((product) => (
+            <VerticalCard
+              imgUrl={product.coverImage.image}
+              title={product.title}
+              name={product.owner.name}
+              category={product.category}
+              key={product.id}
+              id={product.id}
+            />
+          ))}
+      </SectionWrapper>
+      <SectionWrapper txt="Explore Auctions" seeMore="/auction">
+        {auctions &&
+          auctions.map((auction) => (
+            <VerticalGenericCard
+              imgUrl={auction.coverImage.image}
+              title={auction.title}
+              name={auction.artist.name}
+              category={auction.category}
+              key={auction.id}
+              id={auction.id}
+              url="auction"
+            >
+              <AuctionTxt
+                title={auction.title}
+                name={auction.artist.name}
+                key={auction.id}
+                id={auction.id}
+                description={auction.description}
+                price={auction.price}
+              />
+            </VerticalGenericCard>
           ))}
       </SectionWrapper>
     </>

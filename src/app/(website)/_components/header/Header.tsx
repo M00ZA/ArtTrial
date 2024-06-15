@@ -165,11 +165,16 @@ const Header = () => {
           top: "73px",
           width: { xs: "100%", md: "auto" },
           alignItems: { xs: "center", md: "initial" },
-          paddingRight: { xs: "95px", md: "0" },
+          paddingRight: { xs: "40px", md: "0" },
+          paddingY: { xs: "20px", md: "0" },
+          backgroundColor: "white",
         }}
         display={{ md: "flex", xs: show ? "flex" : "none" }}
       >
-        <Box component="li">
+        <Box
+          component="li"
+          sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
+        >
           <Link href={"/"}>
             <Typography
               component="p"
@@ -183,7 +188,10 @@ const Header = () => {
             </Typography>
           </Link>
         </Box>
-        <Box component="li">
+        <Box
+          component="li"
+          sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
+        >
           <Link href={"/gallery"}>
             <Typography
               component="p"
@@ -197,7 +205,10 @@ const Header = () => {
             </Typography>
           </Link>
         </Box>
-        <Box component="li">
+        <Box
+          component="li"
+          sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
+        >
           <Link href={"/events"}>
             <Typography
               component="p"
@@ -208,6 +219,23 @@ const Header = () => {
               }}
             >
               Events
+            </Typography>
+          </Link>
+        </Box>
+        <Box
+          component="li"
+          sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
+        >
+          <Link href={"/auction"}>
+            <Typography
+              component="p"
+              sx={{
+                "&:hover": {
+                  color: "blue",
+                },
+              }}
+            >
+              Auction
             </Typography>
           </Link>
         </Box>

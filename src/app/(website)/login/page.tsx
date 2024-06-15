@@ -35,8 +35,8 @@ export default function Login() {
   const endpoint = type == "artist" ? "artistAuth/login" : "userAuth/login";
   const form = useForm<Zod.infer<typeof userLoginSchema>>({
     defaultValues: {
-      email: "mohamedabdelstar30@gmail.com",
-      password: "#Mohammed2002",
+      email: "e3f72ba1ea@emailcbox.pro",
+      password: "elnoooo2002#",
     },
     resolver: zodResolver(userLoginSchema),
   });
