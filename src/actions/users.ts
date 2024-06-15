@@ -32,7 +32,7 @@ export async function getUserEvents() {
 
   export async function createCheckoutSession(shippingAddress:string,cartId:string){
     const token = getCookie('token')
-    return await axios.get(useAPI(`order/checkoutSession/${cartId}`),{...headers(token),params:{shippingAddress}})
+    return await axios.post(useAPI(`order/checkoutSession/${cartId}`),{shippingAddress}, headers(token))
     
     // const res =  await fetch(useAPI(`order/checkoutSession/${cartId}`),{
     //   ...headers(token),

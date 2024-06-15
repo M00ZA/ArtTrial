@@ -95,6 +95,8 @@ export default function CartComponent() {
         return;
       } else if (d.data?.code == 200) {
         window.open(d.data?.data?.url, "_blank");
+        toast.success("Please fill the form then check your orders");
+        router.push("/home");
       } else {
         console.log({ d });
       }
