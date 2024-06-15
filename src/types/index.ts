@@ -172,3 +172,38 @@ export type Order  =   {
 }
 
 export type OrderById = Order&{shippingAddress:Address}
+
+export type Auction = {
+  id: string,
+  title: string,
+  description: string,
+  price: number,
+  width: string,
+  height: string,
+  depth: string,
+  material: string,
+  isAvailable: boolean,
+  coverImage: Picture,
+  images: Picture[],
+  artist: { id: string, name: string ,profileImg:string},
+  category: string,
+  style: string,
+  subject: string,
+  size:string,
+  duration:number,
+  began:string,
+  end:string,
+  finalUser:{
+    id:string,
+    name:string
+  },
+  isLaunch:boolean,
+  isEnded:boolean,
+  userRegisteredInThisAuction:boolean,
+  lastPrices:Array<{
+    user:{ id:string ,
+       name:string} , 
+    price:number}>
+
+}
+

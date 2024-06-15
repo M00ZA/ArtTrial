@@ -1,6 +1,6 @@
 import { headers, useAPI } from "@/lib/utils"
 import { UpdateMyAdminPassword } from "@/schema"
-import { User } from "@/types"
+import { IPaginationParams, User } from "@/types"
 import axios from "axios"
 import { getCookie } from "cookies-next"
 import * as z from 'zod'
@@ -32,7 +32,16 @@ export async function getUserEvents() {
 
   export async function createCheckoutSession(shippingAddress:string,cartId:string){
     const token = getCookie('token')
-    return await axios.post(useAPI(`order/cash/${cartId}`),{shippingAddress}, headers(token))
+    return await axios.get(useAPI(`order/checkoutSession/${cartId}`),{...headers(token),params:{shippingAddress}})
+    
+    // const res =  await fetch(useAPI(`order/checkoutSession/${cartId}`),{
+    //   ...headers(token),
+    //   method:"get",
+    //   body:JSON.stringify({shippingAddress:shippingAddress})
+
+    // })
+    // const data = await res.json()
+    // return data
   }
 
   export async function getMyOrders() {
@@ -72,3 +81,7 @@ export async function getUserEvents() {
     return await axios.patch(useAPI(`users/changePassword`), values, headers(token))
   }
   
+  export async function getAuctions(params: IPaginationParams|undefined={}) {
+    const token = getCookie('token')
+    return await axios.get(useAPI(`auction`), {...headers(token),params})
+  }

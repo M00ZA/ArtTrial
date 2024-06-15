@@ -93,6 +93,8 @@ export default function CartComponent() {
         toast.success("order was made successfully!");
         // router.push("/admin/admins");
         return;
+      } else if (d.data?.code == 200) {
+        window.open(d.data?.data?.url, "_blank");
       } else {
         console.log({ d });
       }
