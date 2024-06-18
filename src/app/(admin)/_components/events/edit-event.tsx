@@ -74,9 +74,9 @@ export const EditEventComponent = () => {
     },
   });
 
-  const event: Event = getEventQuery.data?.data?.data?.event;
+  const event: Event = getEventQuery.data?.data?.data;
   const products: Product[] = allProducts.data?.data?.data?.products.filter(
-    (p: Product) => p?.owner?.id === event?.owner?._id
+    (p: Product) => p?.owner?.id === event?.owner?.id
   );
   const eventProducts: string[] = event?.products?.map(
     (product: Omit<Product, "coverImage"> & { coverImage: string }) =>

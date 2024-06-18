@@ -31,33 +31,28 @@ import { getSubjects } from "../../_actions/subjects";
 
 export const StatsComponent = () => {
   const { admin, isLoading: adminStillLoading } = useAdmin();
-
+  console.log(admin);
   const queriesForIT = useQueries({
     queries: [
       {
         queryKey: ["users"],
-        queryFn: () =>
-          getUsers({
-            page: 1,
-            size: 3,
-            sortBy: "userName asc",
-          }),
-        enabled: admin?.role === "it",
+        queryFn: () => getUsers({}),
+        enabled: admin?.role?.toLowerCase() === "it",
       },
       {
         queryKey: ["artists"],
         queryFn: () => getArtists(),
-        enabled: admin?.role === "it",
+        enabled: admin?.role?.toLowerCase() === "it",
       },
       {
         queryKey: ["events"],
         queryFn: () => getEvents({}),
-        enabled: admin?.role === "it",
+        enabled: admin?.role?.toLowerCase() === "it",
       },
       {
         queryKey: ["products"],
         queryFn: () => getProducts(),
-        enabled: admin?.role === "it",
+        enabled: admin?.role?.toLowerCase() === "it",
       },
     ],
   });
@@ -67,22 +62,22 @@ export const StatsComponent = () => {
       {
         queryKey: ["categories"],
         queryFn: () => getCategories(),
-        enabled: admin?.role === "ceo",
+        enabled: admin?.role?.toLowerCase() === "ceo",
       },
       {
         queryKey: ["admins"],
         queryFn: () => getAdmins(),
-        enabled: admin?.role === "ceo",
+        enabled: admin?.role?.toLowerCase() === "ceo",
       },
       {
         queryKey: ["styles"],
         queryFn: () => getStyles(),
-        enabled: admin?.role === "ceo",
+        enabled: admin?.role?.toLowerCase() === "ceo",
       },
       {
         queryKey: ["subjects"],
         queryFn: () => getSubjects(),
-        enabled: admin?.role === "ceo",
+        enabled: admin?.role?.toLowerCase() === "ceo",
       },
     ],
   });
@@ -92,35 +87,35 @@ export const StatsComponent = () => {
       {
         queryKey: ["orders"],
         queryFn: () => getCategories(),
-        enabled: admin?.role === "tracker",
+        enabled: admin?.role?.toLowerCase() === "tracker",
       },
     ],
   });
 
   const dataForIT = {
-    users: { count: queriesForIT[0].data?.data?.data?.users?.length },
+    users: { count: queriesForIT[0].data?.data?.data?.users?.length || 0 },
     artists: { count: queriesForIT[1].data?.data?.data?.artists?.length },
     events: { count: queriesForIT[2].data?.data?.data?.events?.length },
     products: { count: queriesForIT[3].data?.data?.data?.products?.length },
   };
-
+  console.log(dataForIT);
   const dataForCEO = {
     categories: {
-      count: queriesForCEO[0].data?.data?.data?.categories?.length,
+      count: queriesForCEO[0].data?.data?.data?.length || 0,
     },
-    admins: { count: queriesForCEO[1].data?.data?.data?.admins?.length },
-    styles: { count: queriesForCEO[2].data?.data?.data?.styles?.length },
-    subjects: { count: queriesForCEO[3].data?.data?.data?.subjects?.length },
+    admins: { count: queriesForCEO[1].data?.data?.data?.admins?.length || 0 },
+    styles: { count: queriesForCEO[2].data?.data?.data?.length || 0 },
+    subjects: { count: queriesForCEO[3].data?.data?.data?.length || 0 },
   };
 
   const dataForTracker = {
-    orders: { count: queriesForTracker[0].data?.data?.data?.orders?.length },
+    orders: { count: queriesForTracker[0].data?.data?.data?.length },
   };
 
   if (adminStillLoading) return <StatsComponent.Loading />;
 
   if (
-    admin?.role === "it" &&
+    admin?.role?.toLowerCase() === "it" &&
     queriesForIT[0].isLoading &&
     queriesForIT[1].isLoading &&
     queriesForIT[2].isLoading &&
@@ -128,17 +123,20 @@ export const StatsComponent = () => {
   )
     return <StatsComponent.Loading />;
   if (
-    admin?.role === "ceo" &&
+    admin?.role?.toLowerCase() === "ceo" &&
     queriesForCEO[0].isLoading &&
     queriesForCEO[1].isLoading &&
     queriesForCEO[2].isLoading &&
     queriesForCEO[3].isLoading
   )
     return <StatsComponent.Loading />;
-  if (admin?.role === "tracker" && queriesForTracker[0].isLoading)
+  if (
+    admin?.role?.toLowerCase() === "tracker" &&
+    queriesForTracker[0].isLoading
+  )
     return <StatsComponent.Loading />;
 
-  if (admin.role === "it") {
+  if (admin?.role?.toLowerCase() === "it") {
     return (
       <div className="grid grid-cols-4 gap-6 mb-6">
         <StatsComponent.Item
@@ -173,7 +171,7 @@ export const StatsComponent = () => {
     );
   }
 
-  if (admin.role === "ceo") {
+  if (admin?.role?.toLowerCase() === "ceo") {
     return (
       <div className="grid grid-cols-4 gap-6 mb-6">
         <StatsComponent.Item
@@ -185,7 +183,7 @@ export const StatsComponent = () => {
         />
         <StatsComponent.Item
           label="Categories"
-          stats={dataForCEO.categories.count}
+          stats={dataForCEO?.categories?.count}
           url="/admin/categories"
           urlLabel="All categories"
           icon={ListChecks}
@@ -208,7 +206,7 @@ export const StatsComponent = () => {
     );
   }
 
-  if (admin.role === "tracker") {
+  if (admin?.role?.toLowerCase() === "tracker") {
     return (
       <div className="grid grid-cols-4 gap-6 mb-6">
         <StatsComponent.Item
@@ -254,7 +252,7 @@ StatsComponent.Item = ({
     <div className="shadow-md rounded-md p-6 py-4 ring-1 ring-gray-200">
       <h3 className="font-bold mb-5 text-primary">{label}</h3>
       <p className="m-2 mb-6 text-3xl font-bold">
-        {stats ? (
+        {stats >= 0 ? (
           formatNumber(stats)
         ) : (
           <span className="text-gray-400">Loading...</span>

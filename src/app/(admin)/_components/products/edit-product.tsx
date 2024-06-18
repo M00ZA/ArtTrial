@@ -66,7 +66,7 @@ export const EditProductComponent = () => {
     },
   });
 
-  const product: Product = getProductQuery.data?.data?.data?.product;
+  const product: Product = getProductQuery.data?.data?.data;
 
   const form = useForm({
     defaultValues: {
@@ -84,8 +84,13 @@ export const EditProductComponent = () => {
   const { register } = form;
 
   const updateProductHandler = () => {
-    //@ts-ignore
-    updateMutation.mutate(form.getValues());
+    const { depth, height, width } = form.getValues();
+    updateMutation.mutate({
+      ...form.getValues(),
+      width: parseInt(width),
+      height: parseInt(height),
+      depth: parseInt(depth),
+    });
   };
 
   useEffect(() => {
@@ -197,12 +202,15 @@ export const EditProductComponent = () => {
                   <FormLabel>Width</FormLabel>
                   <FormControl>
                     <Input
-                      defaultValue={product?.width}
+                      defaultValue={parseInt(product?.width)}
                       {...register("width", {
                         valueAsNumber: true,
                       })}
                       type="text"
                       placeholder="Width"
+                      onChange={(event) =>
+                        field.onChange(parseInt(event.target.value))
+                      }
                     />
                   </FormControl>
                   <FormDescription />

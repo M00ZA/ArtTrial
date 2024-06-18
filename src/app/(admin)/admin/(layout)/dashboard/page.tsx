@@ -5,9 +5,9 @@ const DashboardPage = () => {
   return (
     <div>
       <StatsComponent />
-      <ChartsComponent />
+      {/* <ChartsComponent /> */}
     </div>
   );
-}
- 
+};
+
 export default DashboardPage;

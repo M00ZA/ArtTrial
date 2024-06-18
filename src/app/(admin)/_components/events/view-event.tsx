@@ -30,10 +30,10 @@ export const ViewEventComponent = () => {
     queryFn: () => getEvent(eventId),
   });
 
-  const event: Event = eventQuery.data?.data?.data?.event;
+  const event: Event = eventQuery.data?.data?.data;
 
   const { artist: owner, isLoading: ownerLoading } = useGetArtist(
-    event?.owner?._id
+    event?.owner?.id
   );
 
   if (eventQuery.isLoading) return <ViewEventComponent.Loading />;

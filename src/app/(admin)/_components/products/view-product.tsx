@@ -23,7 +23,7 @@ export const ViewProductComponent = () => {
     retry: 3,
   });
 
-  const product: Product = productQuery?.data?.data?.data?.product;
+  const product: Product = productQuery?.data?.data?.data;
   const [current, setCurrent] = useState(product?.coverImage?.image);
 
   console.log(current);

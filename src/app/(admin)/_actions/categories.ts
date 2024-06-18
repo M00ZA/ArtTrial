@@ -1,11 +1,14 @@
 import * as z from 'zod'
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import { EditCategorySchema } from "@/schema";
+import { GetCategoriesResponse } from '@/types';
 
-export async function getCategories() {
+
+
+export async function getCategories():Promise<AxiosResponse<GetCategoriesResponse, any>> {
   const token = getCookie('token')
   return await axios.get(useAPI('categories'), headers(token))
 }

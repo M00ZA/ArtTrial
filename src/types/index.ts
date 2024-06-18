@@ -35,11 +35,12 @@ export type Admin = {
   id: string,
   nId: string,
   name: string,
-  userName: string,
+  username: string,
   phone: string,
   profileImg: string,
   gender: string,
   role: string,
+  userName?:string
   }
 
 export type Picture = {imageId:string,image:string}
@@ -67,7 +68,7 @@ export type Event = {
 
   title: string,
   description: string,
-  owner: { _id: string, name: string,
+  owner: { id: string, name: string,
     profileImg?:string } ,
   duration: number,
   began: string,
@@ -80,27 +81,27 @@ export type Event = {
 }
 
 export type Category = {
-  _id: string,
+  id: string,
   title: string,
   slug: string
 }
 
 export type Style = {
-  _id: string,
+  id: string,
   title: string,
   slug: string
 }
 
 export type Subject = {
-  _id: string,
+  id: string,
   title: string,
   slug: string
 }
 
 export type pageParams = {
-  page: number;
-  size: number;
-  sortBy: "userName asc" | "userName desc";
+  page?: number;
+  limit?: number;
+  sort?: "username asc" | "username desc";
 };
 
 export type userBookedEvent ={
@@ -207,3 +208,24 @@ export type Auction = {
 
 }
 
+///Admin
+
+export type GetCategoriesResponse =GeneralApiResponse<Array<Partial<Category>>>
+export type GetStylesResponse =GeneralApiResponse<Array<Partial<Style>>>
+export type GetSubjectsResponse =GeneralApiResponse<Array<Partial<Subject>>>
+export type GetAdminsResponse = GeneralApiResponse<{admins:Array<Admin>,pagination:AdminPagination}>
+export type GetUsersResponse = GeneralApiResponse<{users:Array<User>,pagination:AdminPagination}>
+
+export type GeneralApiResponse<T> = {
+  status: string,
+  code: number,
+  message: string,
+  data:T
+}
+
+export type AdminPagination = {
+  currentPage: number,
+limit:number,
+numbersOfPages: number,
+totalResults: number
+}

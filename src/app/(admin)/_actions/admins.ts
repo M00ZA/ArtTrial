@@ -1,11 +1,12 @@
 import * as z from 'zod'
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import { AddAdminSchema, EditAdminSchema, UpdateMyAdminPassword, UpdateMyAdminProfileSchema } from "@/schema";
+import { GetAdminsResponse } from '@/types';
 
-export async function getAdmins() {
+export async function getAdmins():Promise<AxiosResponse<GetAdminsResponse, any>> {
   const token = getCookie('token')
   return await axios.get(useAPI(`admins`), headers(token))
 }

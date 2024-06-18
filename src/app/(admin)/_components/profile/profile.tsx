@@ -173,7 +173,7 @@ const ProfilePageComponent = () => {
         <h5 className="font-semibold">
           <span>{admin?.name}</span>
           <span className="text-xs font-normal text-gray-400 block">
-            @{admin?.userName}
+            @{admin?.username}
           </span>
         </h5>
       </header>

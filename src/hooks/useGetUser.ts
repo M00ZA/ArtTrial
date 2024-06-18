@@ -7,7 +7,7 @@ import { headers, useAPI } from "@/lib/utils";
 import axios from "axios";
 
 export function useGetUser(id: string) {
-  const api = useAPI(`user/account/${id}`)
+  const api = useAPI(`users/${id}`)
   const token = getCookie('token')
 
   const query = useQuery({
@@ -18,9 +18,9 @@ export function useGetUser(id: string) {
 
   const { isLoading, isFetched } = query
 
-  console.log(query?.data?.data , "DDDDDDATA")
+  console.log(query?.data?.data?.data , "DDDDDDATA")
 
-  const user: User = query.data?.data?.getUser
+  const user: User = query.data?.data?.data
 
   return { user, isLoading, isFetched, query }
 }

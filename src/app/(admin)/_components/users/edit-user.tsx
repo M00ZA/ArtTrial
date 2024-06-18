@@ -62,7 +62,7 @@ export const EditUserComponent = () => {
     },
   });
 
-  const user: User = getUserQuery.data?.data?.getUser;
+  const user: User = getUserQuery.data?.data?.data;
   console.log(user);
   const form = useForm({
     defaultValues: {

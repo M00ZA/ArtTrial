@@ -28,11 +28,14 @@ import { useAdmin } from "@/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 import { useLang } from "@/hooks/useLanguage";
 import { Input } from "@/components/ui/input";
+import { deleteCookie } from "cookies-next";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const AdminNavbar = ({ lang }: { lang: any }) => {
   const { admin, isLoading: pendingAdmin } = useAdmin();
   const { language, changeLanguage } = useLang();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <nav
@@ -50,13 +53,13 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
       </div>
 
       <div className="flex gap-x-2">
-        <Button variant="ghost">
+        {/* <Button variant="ghost">
           <Link href="/">
             <Bell />
           </Link>
-        </Button>
+        </Button> */}
 
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost">
               <Globe />
@@ -91,7 +94,7 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
               </a>
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -111,7 +114,7 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
             ) : (
               <>
                 <DropdownMenuLabel>
-                  <Link href="/admin/profile">@{admin.userName}</Link>
+                  <Link href="/admin/profile">@{admin?.username}</Link>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -122,29 +125,35 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
                     <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem
+                  {/* <DropdownMenuItem
                     onClick={() => router.push(`/admin/settings`)}
                   >
                     Settings
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
 
                   <DropdownMenuItem
-                    onClick={() => router.push(`/admin/profile/password`)}
+                    onClick={() => {
+                      // router.push(`/admin/logout`)
+                      deleteCookie("token");
+                      queryClient.resetQueries();
+                      queryClient.removeQueries();
+                      router.push(`/admin/login`);
+                    }}
                   >
-                    Change Password
+                    Logout
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem
+                  {/* <DropdownMenuItem
                     onClick={() => router.push(`/admin/profile/details`)}
                   >
                     Change Details
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
 
-                  <DropdownMenuItem
+                  {/* <DropdownMenuItem
                     onClick={() => router.push(`/admin/profile/language`)}
                   >
                     Default Language
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
                 </DropdownMenuGroup>
               </>
             )}

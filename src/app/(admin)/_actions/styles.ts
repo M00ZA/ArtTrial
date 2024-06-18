@@ -1,11 +1,12 @@
 import * as z from 'zod'
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
 import {  EditStyleSchema } from "@/schema";
+import { GetStylesResponse } from '@/types';
 
-export async function getStyles() {
+export async function getStyles():Promise<AxiosResponse<GetStylesResponse, any>>  {
   const token = getCookie('token')
   return await axios.get(useAPI('styles'), headers(token))
 }

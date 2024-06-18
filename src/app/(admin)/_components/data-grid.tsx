@@ -1,9 +1,9 @@
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from "@mui/x-data-grid";
 
-export const DataTable = ({ rows, columns }: { rows: any, columns: any }) => {
+export const DataTable = ({ rows, columns }: { rows: any; columns: any }) => {
   return (
     <div className="mt-4">
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -12,11 +12,11 @@ export const DataTable = ({ rows, columns }: { rows: any, columns: any }) => {
               paginationModel: { page: 0, pageSize: 10 },
             },
           }}
-          getRowId={ row => row._id }
+          getRowId={(row) => row.id}
           pageSizeOptions={[5, 10]}
           checkboxSelection
         />
       </div>
     </div>
-  )
-}
+  );
+};

@@ -5,7 +5,7 @@ const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp"];
 
 export const AdminLoginSchema = z.object({
-  userName: z.string().min(1, { message: "Username cannot be empty" }),
+  username: z.string().min(1, { message: "Username cannot be empty" }),
   password: z.string().min(1, { message: "Password cannot be empty" }),
 }) 
 
@@ -37,7 +37,7 @@ export const AddAdminSchema = z.object({
   picture: z.any().optional(),
   name: z.string().min(1, { message: "Name of Admin is required!" }),
   phone: z.string().min(1, { message: "Phone number is required!" }).regex(/^01[0-2,5]{1}[0-9]{8}$/, { message: 'Invalid Egyptian number!' }),
-  userName: z.string().min(1, { message: "Username is required" }),
+  username: z.string().min(1, { message: "username is required" }),
   password: z.string().min(8, { message: "Password Must be at least 8 characters" }),
   passwordConfirm: z.string(),
   nId: z.string().min(14, { message: "National ID Must Be 14 Number" }).max(14, { message: "Cannot be more than 14 number" }),
@@ -82,9 +82,9 @@ export const UpdateMyAdminPassword = z.object({
 export const EditProductSchema = z.object({
   title: z.string().min(1, { message: "Product title is required!" }),
   description: z.string().min(1, { message: "Product description is required!" }),
-  style: z.string().min(1, { message: "Style is required!" }),
-  isAvailable: z.boolean(),
-  subject: z.string().min(1, { message: "Subject is required!" }),
+  // style: z.string().min(1, { message: "Style is required!" }),
+  // isAvailable: z.boolean(),
+  // subject: z.string().min(1, { message: "Subject is required!" }),
   price: z.number().gt(0, { message: "Number required in width" }),
   width: z.number().gt(0, { message: "Number required in width" }),
   height: z.number().gt(0, { message: "Number required in height" }),
