@@ -44,7 +44,7 @@ export default function AuctionDetails() {
   //     ""
   //   );
 
-  const { isConnected, transport, price, setPrice } = useSocket();
+  const { isConnected, price, setPrice, error, setError } = useSocket();
 
   console.log("myid", id);
 
@@ -159,7 +159,12 @@ export default function AuctionDetails() {
   const OPTIONS: EmblaOptionsType = {};
   // const SLIDE_COUNT = 5
   // const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
-
+  useEffect(() => {
+    setPrice(
+      auction?.lastPrices[auction?.lastPrices.length - 1]?.price + "" ||
+        auction?.price + ""
+    );
+  }, [auction]);
   if (isLoading) {
     return <LandingLoader />;
   }
@@ -315,9 +320,7 @@ export default function AuctionDetails() {
                 gap={"4px"}
               >
                 <MonetizationOnIcon />
-                {price + "" ||
-                  auction?.lastPrices[auction?.lastPrices.length - 1]?.price ||
-                  auction?.price}
+                {price}
               </Typography>
             </Typography>
             <Typography
@@ -376,7 +379,7 @@ export default function AuctionDetails() {
             </Stack>
 
             <PropertyTagItem property="Size" value={auction?.size} />
-            {isConnected && "connected"}
+            {/* {isConnected && "connected"} */}
             {/* <FormControl> */}
             {/* <FormField
               control={}
@@ -407,13 +410,16 @@ export default function AuctionDetails() {
               )}
             /> */}
             <input
-              //   defaultValue={user?.email}
-              value={
-                price + "" ||
-                auction?.lastPrices[auction?.lastPrices.length - 1]?.price ||
-                auction?.price
-              }
+              value={price}
               onChange={(e) => {
+                const reg = new RegExp("^[0-9]+$");
+                console.log(reg.test(e.target.value));
+                console.log(reg, e.target.value);
+                if (!reg.test(e.target.value)) {
+                  setError("please enter a valid number");
+                } else {
+                  setError("");
+                }
                 setPrice(e.target.value);
               }}
               type="text"
@@ -421,6 +427,19 @@ export default function AuctionDetails() {
               //   disabled={true}
             />
             {/* </FormControl> */}
+            {error && (
+              <Typography
+                component="p"
+                variant="body1"
+                marginBottom={"0"}
+                // fontWeight={"bold"}
+                fontSize={".9rem"}
+                color="red"
+                maxWidth="400px"
+              >
+                {error}
+              </Typography>
+            )}
             <Button
               className="w-fit"
               style={{
@@ -443,6 +462,20 @@ export default function AuctionDetails() {
 
                 if (auction?.userRegisteredInThisAuction) {
                   console.log("btn cliicked", price);
+
+                  const lastBid =
+                    auction?.lastPrices[auction?.lastPrices.length - 1]
+                      ?.price || auction?.price;
+
+                  if (parseInt(price) <= lastBid * 1) {
+                    setError(
+                      "Your Bid price should be higher than the last bid"
+                    );
+                    return;
+                  } else if (!price) {
+                    setError("Bid price can't be empty");
+                    return;
+                  }
                   bidHandler(price);
                   return;
                 }
@@ -450,6 +483,7 @@ export default function AuctionDetails() {
               }}
               variant="contained"
               color="success"
+              disabled={!!error}
               // disabled={
               //   isBooked
               //     ? isDateWithingTwoDates(

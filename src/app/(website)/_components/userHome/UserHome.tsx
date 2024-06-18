@@ -4,18 +4,23 @@ import ExhibitionCard from "../cards/ExhibtionCard";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getEvents } from "@/app/(admin)/_actions/events";
 import { Auction, Event, Product } from "@/types";
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import LandingLoader from "../landingLoader/landingLoader";
 import { getProducts } from "@/app/(admin)/_actions/products";
 import VerticalCard from "../cards/VerticalCard";
 import { getAuctions } from "@/actions/users";
 import VerticalGenericCard from "../cards/VerticalGenericCard";
 import AuctionTxt from "../auctionComponent/AuctionTxt";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import SearchBar from "../searchComponent/SearchBar";
 
 export default function UserHome() {
+  const [searchTerm, setSearchTerm] = useState("");
   const pathname = usePathname();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["events"] });
@@ -54,12 +59,23 @@ export default function UserHome() {
   const auctions: Auction[] = auctionQuery?.data?.data?.data?.auctions;
   console.log(events);
 
+  function searchHandler() {
+    if (!searchTerm) return;
+    // localStorage.setItem("searchTerm",searchTerm)
+    router.push(`/search?q=${searchTerm}`);
+  }
+
   if (isLoading) {
     return <LandingLoader />;
   }
 
   return (
     <>
+      <SearchBar
+        search={searchTerm}
+        searchHandler={searchHandler}
+        setSearch={setSearchTerm}
+      />
       <SectionWrapper txt="Explore Events" seeMore="/events">
         {isError && <div>Something went wrong please try again later</div>}
         {/* {isLoading && <LandingLoader />} */}

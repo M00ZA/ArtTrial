@@ -255,7 +255,7 @@ const Header = () => {
           </Box> */}
       </Stack>
       {/* <Box component="div"  sx={{marginLeft:{xs:"auto",md:"0"}}}> */}
-      {isLoading && type ? (
+      {isLoading && memberType ? (
         <CircularProgress />
       ) : (
         <>

@@ -8,6 +8,7 @@ export function useSocket(){
     const [price, setPrice] = useState<string>(
         ""
       );
+    const [error,setError] = useState("")
   
     useEffect(() => {
       if (socket.connected) {
@@ -45,6 +46,6 @@ export function useSocket(){
 
   
       
-    return {isConnected,transport,price,setPrice}
+    return {isConnected,transport,price,setPrice,error,setError}
   
 }

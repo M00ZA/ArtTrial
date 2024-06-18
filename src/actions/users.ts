@@ -100,3 +100,9 @@ export async function getUserEvents() {
     const token = getCookie('token')
     return await axios.get(useAPI(`registerAuction/checkoutSession/${id}`), headers(token))
   }
+  
+
+  export async function getSearchResults(searchKeywork:string) {
+    const token = getCookie('token')
+    return await axios.get(useAPI(`search/user?keyword=${searchKeywork}`), headers(token))
+  }
