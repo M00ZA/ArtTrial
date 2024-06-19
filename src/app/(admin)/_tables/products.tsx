@@ -4,13 +4,34 @@ import GridActionsContainer, { createActionObject } from "@/lib/create-action";
 import createColumn from "@/lib/create-column";
 
 export const ProductsColumns = [
-  createColumn("title", "Title"),
-  createColumn("price", "Price"),
+  createColumn(
+    "title",
+    "Title",
+    (params: any) => params.row.title,
+    true,
+    true,
+    true
+  ),
+  createColumn(
+    "price",
+    "Price",
+    (params: any) => params.row.price,
+    true,
+    true,
+    true
+  ),
   createColumn("size", "Sizes", (params: any) => {
     return `${params.row.size}`;
   }),
 
-  createColumn("material", "Material"),
+  createColumn(
+    "material",
+    "Material",
+    (params: any) => params.row.material,
+    true,
+    true,
+    true
+  ),
   createColumn("isAvailable", "Is Available", (params: any) => {
     return params.row.isAvailable ? (
       <span className="text-green-700 font-bold">Yes</span>

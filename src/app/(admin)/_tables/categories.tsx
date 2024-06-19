@@ -4,7 +4,14 @@ import GridActionsContainer, { createActionObject } from "@/lib/create-action";
 import createColumn from "@/lib/create-column";
 
 export const CategoriesColumns = [
-  createColumn("title", "Title"),
+  createColumn(
+    "title",
+    "Title",
+    (params: any) => params.row.title,
+    true,
+    true,
+    true
+  ),
   createColumn(
     "actions",
     "Actions",

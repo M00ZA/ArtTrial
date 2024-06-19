@@ -1,25 +1,19 @@
-import { API_URL } from "@/lib/constants";
 import { useQuery } from "@tanstack/react-query";
-import { getCookie } from "cookies-next";
-
 import { Product } from "@/types";
-import { headers } from "@/lib/utils";
-
-import axios from "axios";
+import { getProduct } from "@/app/(admin)/_actions/products";
 
 export function useProduct(id: string) {
-  const api = `${API_URL}products/${id}`
-  const token = getCookie('token')
+
 
   const query = useQuery({
     queryKey: ['products', id],
-    queryFn: () => axios.get(api, headers(token)),
+    queryFn: () => getProduct(id),
     retry: false
   })
 
   const { isLoading, isFetched } = query
 
-  const product: Product = query.data?.data?.data?.product
+  const product: Product = query.data?.data?.data
 
   return { product, isLoading, isFetched, query }
 }

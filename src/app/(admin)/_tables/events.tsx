@@ -5,7 +5,14 @@ import createColumn from "@/lib/create-column";
 import { formatDate } from "@/lib/utils";
 
 export const EventsColumns = [
-  createColumn("title", "Title"),
+  createColumn(
+    "title",
+    "Title",
+    (params: any) => params.row.title,
+    true,
+    true,
+    true
+  ),
   createColumn("began", "Start", (params: any) => {
     return <span>{formatDate(params.row.began)}</span>;
   }),

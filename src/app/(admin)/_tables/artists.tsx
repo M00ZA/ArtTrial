@@ -28,26 +28,19 @@ export const ArtistsColumns = [
     false,
     false
   ),
-  createColumn(
-    "accountActive",
-    "Is Active?",
-    (params: any) => {
-      return (
-        <span
-          className={
-            params.row.accountActive
-              ? "text-green-700 font-bold"
-              : "text-orange-500"
-          }
-        >
-          {params.row.accountActive ? "Yes" : "No"}
-        </span>
-      );
-    },
-    true,
-    true,
-    true
-  ),
+  createColumn("accountActive", "Is Active?", (params: any) => {
+    return (
+      <span
+        className={
+          params.row.accountActive
+            ? "text-green-700 font-bold"
+            : "text-orange-500"
+        }
+      >
+        {params.row.accountActive ? "Yes" : "No"}
+      </span>
+    );
+  }),
   createColumn(
     "actions",
     "Actions",

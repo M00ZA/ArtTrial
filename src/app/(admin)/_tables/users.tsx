@@ -5,7 +5,7 @@ import createColumn from "@/lib/create-column";
 
 export const UsersColumns = [
   createColumn(
-    "userName",
+    "name",
     "Name",
     (params: any) => params.row.name,
     true,

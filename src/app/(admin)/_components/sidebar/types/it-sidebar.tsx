@@ -15,8 +15,10 @@ import {
   Users,
   Watch,
 } from "lucide-react";
+import { useAdminLougout } from "@/hooks/useAdmin";
 
 export const ItSidebar = ({ language }: { language: any }) => {
+  const logoutHandler = useAdminLougout();
   return (
     <aside
       className={`w-[280px] fixed top-0 bg-white border-r border-r-gray-200 h-full ${
@@ -54,7 +56,12 @@ export const ItSidebar = ({ language }: { language: any }) => {
         label="User"
         items={[
           { href: "/admin/profile", label: "Profile", icon: User },
-          { href: "/admin/logout", label: "Logout", icon: LogOut },
+          {
+            href: "/admin/logout",
+            label: "Logout",
+            icon: LogOut,
+            onClick: logoutHandler,
+          },
         ]}
       />
     </aside>

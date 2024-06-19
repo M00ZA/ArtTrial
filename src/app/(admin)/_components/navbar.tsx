@@ -39,18 +39,18 @@ export const AdminNavbar = ({ lang }: { lang: any }) => {
 
   return (
     <nav
-      className={`flex  justify-between p-4 px-12 border-b ${
+      className={`flex  justify-end p-4 px-12 border-b ${
         lang === "english" ? "flex-row" : "flex-row-reverse"
       }`}
     >
-      <div className="w-[350px] relative">
+      {/* <div className="w-[350px] relative">
         <Input placeholder="Search...." />
         <Search
           className={`text-gray-400 absolute top-1/2 transform -translate-y-1/2 ${
             lang == "english" ? "right-3" : "left-3"
           }`}
         />
-      </div>
+      </div> */}
 
       <div className="flex gap-x-2">
         {/* <Button variant="ghost">
