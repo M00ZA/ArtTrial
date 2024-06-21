@@ -101,11 +101,11 @@ export const AddProductComponent = () => {
       addNewProduct(values),
     onSuccess: (d) => {
       if (d.data?.code === 201) {
-        toast.success("Event created successfully!");
-        router.push("/events?type=artist");
+        toast.success("Product created successfully!");
+        router.push("/gallery?type=artist");
         return;
       }
-      toast.error("Couldnot update event!");
+      toast.error("Couldnot create product!");
     },
     onError: (d: any) => {
       if (d?.response?.data?.message) {
@@ -129,7 +129,7 @@ export const AddProductComponent = () => {
       category: "",
       images: [],
       coverImage: "",
-      inEvent: false,
+      // inEvent: false,
     },
     resolver: zodResolver(AddProductSchema),
   });
@@ -415,7 +415,7 @@ export const AddProductComponent = () => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="inEvent"
             render={({ field }) => (
@@ -443,7 +443,7 @@ export const AddProductComponent = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           {/* inEvent */}
 

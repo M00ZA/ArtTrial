@@ -53,7 +53,7 @@ export const AddEventComponent = () => {
         router.push("/events?type=artist");
         return;
       }
-      toast.error("Couldnot update event!");
+      toast.error("Couldn't update event!");
     },
     onError: (d: any) => {
       if (d?.response?.data?.message) {

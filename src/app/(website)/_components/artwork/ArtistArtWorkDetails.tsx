@@ -47,23 +47,12 @@ export default function ArtistArtWorkDetails() {
   const deleteProductMutation = useMutation({
     mutationFn: deleteMyProduct,
     onSuccess: (d) => {
-      if (d.data?.code === 201) {
-        toast.success("proudct added to cart successfully!", {
-          onAutoClose: () => {
-            router.push(`/gallery?type=artist`);
-          },
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["products", id],
-          refetchType: "all",
-        });
-        queryClient.invalidateQueries({
-          queryKey: ["cart"],
-          refetchType: "all",
-        });
+      if (d.data?.code === 200) {
+        toast.success("proudct deleted successfully!");
+        router.push(`/gallery?type=artist`);
         return;
       }
-      toast.error("Couldnot add product to cart!");
+      toast.error("Couldn't delete product!");
       console.log(d);
     },
     onError: (d: any) => {

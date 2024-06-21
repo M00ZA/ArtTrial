@@ -113,12 +113,8 @@ export default function EditAuctionComponent() {
       updateProductFromAuction(id as string, values),
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("Auction updated successfully!", {
-          onAutoClose: () => {
-            router.push(`/auction/${id}?type=artist`);
-          },
-        });
-
+        toast.success("Auction updated successfully!");
+        router.push(`/auction/${id}?type=artist`);
         queryClient.invalidateQueries({ queryKey: ["auction", "product", id] });
         return;
       }
@@ -253,7 +249,7 @@ export default function EditAuctionComponent() {
             name="finalPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>finalPrice</FormLabel>
+                <FormLabel>Initial Price</FormLabel>
                 <FormControl>
                   <Input
                     //   defaultValue={event?.duration}
@@ -261,7 +257,7 @@ export default function EditAuctionComponent() {
                       valueAsNumber: true,
                     })}
                     type="text"
-                    placeholder="finalPrice"
+                    placeholder="Initial Price"
                   />
                 </FormControl>
                 <FormDescription />

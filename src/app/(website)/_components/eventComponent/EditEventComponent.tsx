@@ -61,10 +61,10 @@ export default function EditEventComponent() {
     onSuccess: (d) => {
       if (d.data?.code === 200) {
         toast.success("Event Updated successfully!");
-        //router.push('/admin/events')
+        router.push(`/events/${id}?type=artist`);
         return;
       }
-      toast.error("Couldnot update event!");
+      toast.error("Couldn't update event!");
     },
     onError: (d: any) => {
       if (d?.response?.data?.message) {

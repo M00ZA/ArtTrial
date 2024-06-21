@@ -64,11 +64,8 @@ export default function AddAddressComponent() {
       console.log(data);
       console.log(variable);
       if (data?.code == 201 || data?.code == 200) {
-        toast.success("address added successfully", {
-          onAutoClose: () => {
-            router.push("/profile/address");
-          },
-        });
+        toast.success("address added successfully");
+        router.push("/profile/address");
       } else {
         toast.error(data.response.data.error_msg);
       }

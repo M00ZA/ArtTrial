@@ -223,7 +223,7 @@ export const AddProductSchema = z.object({
     (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
     "Only .jpg, .jpeg, .png and .webp formats are supported."
   ),
-  inEvent: z.boolean(),
+  inEvent: z.boolean().optional(),
   images: z.any()
 })
 
@@ -239,7 +239,7 @@ export const EditArtWorkSchema = z.object({
   height: z.number().gt(0, { message: "Number required in height" }),
   depth: z.number().gt(0, { message: "Number required in depth" }),
   material: z.string().min(1, { message: "Material is required!" }),
-  inEvent: z.boolean(),
+  // inEvent: z.boolean(),
 })
 
 

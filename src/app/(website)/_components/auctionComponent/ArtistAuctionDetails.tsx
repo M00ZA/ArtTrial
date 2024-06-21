@@ -44,12 +44,8 @@ export default function ArtistAuctionDetails() {
     mutationFn: (values: { id: string }) => deleteAuction(values.id),
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("Auction has been deleted successfully!", {
-          onAutoClose: () => {
-            router.push(`/auction?type=artist`);
-          },
-        });
-
+        toast.success("Auction has been deleted successfully!");
+        router.push(`/auction?type=artist`);
         return;
       }
       toast.error("Couldn't delete!");

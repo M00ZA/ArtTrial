@@ -40,17 +40,12 @@ const ChangePasswordComponent = () => {
       console.log(res);
       if (res.data?.code === 200) {
         toast.success(
-          "User Password Changed successfully!, Please login using your new password",
-          {
-            onAutoClose: () => {
-              localStorage.setItem("loggedInAs", "");
-              localStorage.setItem("memberProfile", "");
-              deleteCookie("token");
-              router.push(`/loginType`);
-            },
-          }
+          "User Password Changed successfully!, Please login using your new password"
         );
-
+        localStorage.setItem("loggedInAs", "");
+        localStorage.setItem("memberProfile", "");
+        deleteCookie("token");
+        router.push(`/loginType`);
         return;
       }
     },

@@ -105,13 +105,9 @@ const EditArtWorkDetails = () => {
       updateMeProduct(id as string, values),
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("product updated successfully!", {
-          onAutoClose: () => {
-            router.push(`/gallery/${id}?type=artist`);
-          },
-        });
-
-        queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
+        toast.success("product updated successfully!");
+        router.push(`/gallery/${id}?type=artist`);
+        // queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
         return;
       }
       toast.error("Couldnot update product!");
@@ -136,7 +132,7 @@ const EditArtWorkDetails = () => {
       style: "",
       subject: "",
       category: "",
-      inEvent: false,
+      // inEvent: false,
     },
     resolver: zodResolver(EditArtWorkSchema),
   });
@@ -448,7 +444,7 @@ const EditArtWorkDetails = () => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="inEvent"
             render={({ field }) => (
@@ -476,7 +472,7 @@ const EditArtWorkDetails = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           {/* inEvent */}
 

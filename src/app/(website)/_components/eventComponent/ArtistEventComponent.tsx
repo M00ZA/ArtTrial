@@ -69,15 +69,11 @@ export default function ArtistEventComponent() {
     mutationFn: deleteMeEvent,
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("Event deleted successfully!", {
-          onAutoClose: () => {
-            router.push(`/events?type=artist`);
-          },
-        });
-
+        toast.success("Event deleted successfully!");
+        router.push(`/events?type=artist`);
         return;
       }
-      toast.error("Couldnot delete event!");
+      toast.error("Couldn't delete event!");
       console.log(d);
     },
     onError: (d: any) => {
@@ -87,7 +83,7 @@ export default function ArtistEventComponent() {
     },
   });
 
-  const eventBookingHandler = () => {
+  const eventDeleteHandler = () => {
     deleteEventMutation.mutate(id as string);
   };
 
@@ -279,7 +275,7 @@ export default function ArtistEventComponent() {
             }}
             onClick={(e) => {
               e.preventDefault();
-              eventBookingHandler();
+              eventDeleteHandler();
             }}
             variant="contained"
             color="success"

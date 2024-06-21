@@ -210,7 +210,7 @@ export const AddAuctionComponent = () => {
             name="finalPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>finalPrice</FormLabel>
+                <FormLabel>Initiak Price</FormLabel>
                 <FormControl>
                   <Input
                     //   defaultValue={event?.duration}
@@ -218,7 +218,7 @@ export const AddAuctionComponent = () => {
                       valueAsNumber: true,
                     })}
                     type="text"
-                    placeholder="finalPrice"
+                    placeholder="Initial Price"
                   />
                 </FormControl>
                 <FormDescription />
