@@ -282,3 +282,8 @@ export const EditAuctionProductSchema = z.object({
   duration: z.number().gt(0, { message: "Number required in duration" }),
   began: z.string().min(1, { message: "began date is required" }).refine(began => isValidDate(began,false),"Began date must be a valid date YYYY-MM-DD"),
 })
+
+
+export const changeOrderStateSchema = z.object({
+  state: z.string().min(1, { message: "Please select state" })
+})
