@@ -1,5 +1,5 @@
 import { headers, useAPI } from "@/lib/utils"
-import { UpdateMyAdminPassword } from "@/schema"
+import { EditAuctionProductSchema, UpdateMyAdminPassword } from "@/schema"
 import { IPaginationParams, User } from "@/types"
 import axios from "axios"
 import { getCookie } from "cookies-next"
@@ -110,4 +110,14 @@ export async function getUserEvents() {
   export async function getMyAuctions(params: IPaginationParams|undefined={}) {
     const token = getCookie('token')
     return await axios.get(useAPI(`auction/me`), {...headers(token),params})
+  }
+
+  export async function deleteAuction(id:string) {
+    const token = getCookie('token')
+    return await axios.delete(useAPI(`auction/product/${id}`), headers(token))
+  }
+
+  export async function updateProductFromAuction(id:string,values:z.infer<typeof EditAuctionProductSchema>) {
+    const token = getCookie('token')
+    return await axios.patch(useAPI(`auction/product/${id}`),values, headers(token))
   }

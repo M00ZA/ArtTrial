@@ -6,6 +6,7 @@ interface IProps {
   name: string;
   email: string;
   onSignout: () => void;
+  isArtist?: boolean;
 }
 
 export default function AvatarDropdown({
@@ -13,6 +14,7 @@ export default function AvatarDropdown({
   name,
   email,
   onSignout,
+  isArtist,
 }: IProps) {
   const [show, setShow] = useState(false);
   return (
@@ -36,43 +38,45 @@ export default function AvatarDropdown({
             <div>{name}</div>
             <div className="font-medium truncate">{email}</div>
           </div>
-          <ul
-            className="py-2 text-sm text-gray-700 dark:text-gray-200"
-            aria-labelledby="avatarButton"
-          >
-            <li>
-              <Link
-                href={"/profile"}
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Profile
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/order"}
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                orders
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/profile/address"}
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Addresses
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={"/profile/changePassword"}
-                className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-              >
-                Change Password
-              </Link>
-            </li>
-          </ul>
+          {!isArtist && (
+            <ul
+              className="py-2 text-sm text-gray-700 dark:text-gray-200"
+              aria-labelledby="avatarButton"
+            >
+              <li>
+                <Link
+                  href={"/profile"}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/order"}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  orders
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/profile/address"}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Addresses
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href={"/profile/changePassword"}
+                  className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >
+                  Change Password
+                </Link>
+              </li>
+            </ul>
+          )}
           <div className="py-1">
             {/* <Link
               onClick={onSignout}

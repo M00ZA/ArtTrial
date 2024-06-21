@@ -71,12 +71,12 @@ export function formatDate(date: string, format = {
   return new Date(date).toLocaleDateString("en-US", format as any)
 }
 
-export function isValidDate(dateString:string) {
+export function isValidDate(dateString:string,futureDate:boolean=true) {
   var regEx = /^\d{4}-\d{2}-\d{2}$/;
   if(!dateString.match(regEx)) return false;  // Invalid format
   var d = new Date(dateString);
   var dNum = d.getTime();
   if(!dNum && dNum !== 0) return false; // NaN value, Invalid date
   const isFutureDate = (new Date()).getTime() < dNum
-  return d.toISOString().slice(0,10) === dateString && isFutureDate;
+  return futureDate ?d.toISOString().slice(0,10) === dateString && isFutureDate:d.toISOString().slice(0,10) === dateString ;
 }

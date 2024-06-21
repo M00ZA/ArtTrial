@@ -7,9 +7,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import {
   addNewProduct,
-  getMeProduct,
+  addNewProductToAuction,
   getProducts,
-  updateMeProduct,
 } from "@/app/(admin)/_actions/products";
 import { addEvent, getEvent, updateEvent } from "@/app/(admin)/_actions/events";
 
@@ -43,7 +42,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 // Types & Validation
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditArtWorkSchema } from "@/schema";
+import { AddProductToAuctionSchema } from "@/schema";
 import { Category, Event, Product } from "@/types";
 import { SubmitButton } from "@/app/(admin)/_components/submit-button";
 
@@ -60,27 +59,28 @@ import { getCategories } from "@/app/(admin)/_actions/categories";
 import { getStyles } from "@/app/(admin)/_actions/styles";
 import { getSubjects } from "@/app/(admin)/_actions/subjects";
 
-const EditArtWorkDetails = () => {
+export const AddAuctionComponent = () => {
   const router = useRouter();
+  //   const [multipleImages, setMultipleImages] = useState<string[]>([]);
+
+  //   const changeMultipleFiles = (e: React.ChangeEvent<HTMLInputElement>, form: any) => {
+  //     if (e.target.files) {
+  //       const imageArray = Array.from(e.target.files).map((file) =>
+  //         URL.createObjectURL(file)
+  //       );
+  //       setMultipleImages((prevImages) => [...prevImages, ...imageArray]);
+
+  //     }
+  //   };
   const pathname = usePathname();
   const queryClient = useQueryClient();
-
-  const { id } = useParams();
 
   useEffect(() => {
     //   subjectsQuery.refetch();
     queryClient.invalidateQueries({ queryKey: ["subjects"] });
     queryClient.invalidateQueries({ queryKey: ["categories"] });
     queryClient.invalidateQueries({ queryKey: ["styles"] });
-    queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
   }, [pathname]);
-
-  const productQuery = useQuery({
-    queryKey: ["products", "me", id],
-    queryFn: () => getMeProduct(id as string),
-  });
-
-  const product: Product = productQuery.data?.data?.data;
 
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
@@ -100,21 +100,16 @@ const EditArtWorkDetails = () => {
   const styles = stylesQuery?.data?.data?.data;
   const subjects = subjectsQuery?.data?.data?.data;
 
-  const editMutation = useMutation({
-    mutationFn: (values: zod.infer<typeof EditArtWorkSchema>) =>
-      updateMeProduct(id as string, values),
+  const addMutation = useMutation({
+    mutationFn: (values: zod.infer<typeof AddProductToAuctionSchema>) =>
+      addNewProductToAuction(values),
     onSuccess: (d) => {
-      if (d.data?.code === 200) {
-        toast.success("product updated successfully!", {
-          onAutoClose: () => {
-            router.push(`/gallery/${id}?type=artist`);
-          },
-        });
-
-        queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
+      if (d.data?.code === 201) {
+        toast.success("Auction created successfully!");
+        router.push("/auction?type=artist");
         return;
       }
-      toast.error("Couldnot update product!");
+      toast.error("Couldnot add auction!");
     },
     onError: (d: any) => {
       if (d?.response?.data?.message) {
@@ -124,11 +119,11 @@ const EditArtWorkDetails = () => {
     },
   });
 
-  const form = useForm<zod.infer<typeof EditArtWorkSchema>>({
+  const form = useForm<zod.infer<typeof AddProductToAuctionSchema>>({
     defaultValues: {
       title: "",
       description: "",
-      price: undefined,
+      finalPrice: undefined,
       width: "" as unknown as number,
       height: "" as unknown as number,
       depth: "" as unknown as number,
@@ -136,9 +131,13 @@ const EditArtWorkDetails = () => {
       style: "",
       subject: "",
       category: "",
-      inEvent: false,
+      images: [],
+      coverImage: "",
+      duration: undefined,
+      began: "",
+      //   inEvent: false,
     },
-    resolver: zodResolver(EditArtWorkSchema),
+    resolver: zodResolver(AddProductToAuctionSchema),
   });
 
   const { register } = form;
@@ -146,42 +145,19 @@ const EditArtWorkDetails = () => {
   const updateEventHandler = () => {
     // const { duration, began } = form.getValues();
     console.log(form.getValues());
-    editMutation.mutate({
+    addMutation.mutate({
       ...form.getValues(),
       //   duration: parseInt(duration as any),
       //   began:began,
     });
   };
 
-  // console.log(style, "style");
-  useEffect(() => {
-    if (product) {
-      const style = styles?.find((style) => style?.title == product?.style);
-      const category = categories?.find(
-        (category) => category?.title == product?.category
-      );
-      const subject = subjects?.find(
-        (subject) => subject?.title == product?.subject
-      );
-      form.setValue("title", product?.title);
-      form.setValue("description", product?.description);
-      form.setValue("price", product?.price);
-      form.setValue("width", parseInt(product?.width));
-      form.setValue("height", parseInt(product?.height));
-      form.setValue("depth", parseInt(product?.depth));
-      form.setValue("material", product?.material);
-      form.setValue("category", category?.id as string);
-      form.setValue("style", style?.id as string);
-      form.setValue("subject", subject?.id as string);
-    }
-  }, [product, categories, styles, subjects]);
-
   return (
     <div className="flex justify-center flex-col items-center py-4   ">
       <Form {...form}>
         <PageTitle
           icon={Edit}
-          label={<span className="flex items-center gap-2 ">Edit Product</span>}
+          label={<span className="flex items-center gap-2 ">Add Product</span>}
         />
 
         <form
@@ -231,18 +207,18 @@ const EditArtWorkDetails = () => {
 
           <FormField
             control={form.control}
-            name="price"
+            name="finalPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>price</FormLabel>
+                <FormLabel>finalPrice</FormLabel>
                 <FormControl>
                   <Input
                     //   defaultValue={event?.duration}
-                    {...register("price", {
+                    {...register("finalPrice", {
                       valueAsNumber: true,
                     })}
                     type="text"
-                    placeholder="price"
+                    placeholder="finalPrice"
                   />
                 </FormControl>
                 <FormDescription />
@@ -345,8 +321,7 @@ const EditArtWorkDetails = () => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                    value={field.value}
+                    defaultValue={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Style" />
@@ -382,8 +357,7 @@ const EditArtWorkDetails = () => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                    value={field.value}
+                    defaultValue={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Subject" />
@@ -419,8 +393,7 @@ const EditArtWorkDetails = () => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={field.value}
-                    value={field.value}
+                    defaultValue={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Category" />
@@ -448,7 +421,7 @@ const EditArtWorkDetails = () => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="inEvent"
             render={({ field }) => (
@@ -476,11 +449,11 @@ const EditArtWorkDetails = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           {/* inEvent */}
 
-          {/* <FormField
+          <FormField
             control={form.control}
             name="coverImage"
             render={({ field }) => (
@@ -518,6 +491,11 @@ const EditArtWorkDetails = () => {
                           (file) => URL.createObjectURL(file)
                         );
 
+                        // const imageArray = JSON.stringify(
+                        //   Array.from(e.target.files).map((file) =>
+                        //     URL.createObjectURL(file)
+                        //   )
+                        // );
                         console.log(imageArray);
                         // setMultipleImages((prevImages) => [...prevImages, ...imageArray]);
                         form.setValue("images", imageArray);
@@ -531,13 +509,55 @@ const EditArtWorkDetails = () => {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
-          <SubmitButton status={editMutation.status} label="Update" />
+          <FormField
+            control={form.control}
+            name="began"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Began</FormLabel>
+                <FormControl>
+                  <Input
+                    //   defaultValue={event?.Began}
+                    {...field}
+                    type="date"
+                    placeholder="Began"
+                  />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Duration <span>(days)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    //   defaultValue={event?.duration}
+                    {...register("duration", {
+                      valueAsNumber: true,
+                    })}
+                    type="text"
+                    placeholder="Duration"
+                  />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <SubmitButton status={addMutation.status} label="Add" />
         </form>
       </Form>
     </div>
   );
 };
-
-export default EditArtWorkDetails;

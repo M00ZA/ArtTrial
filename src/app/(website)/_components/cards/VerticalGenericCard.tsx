@@ -9,6 +9,7 @@ interface IProps {
   name: string;
   category: string;
   id: string;
+  isArtist?: boolean;
 }
 
 export default function VerticalGenericCard({
@@ -19,6 +20,7 @@ export default function VerticalGenericCard({
   category,
   id,
   children,
+  isArtist,
 }: PropsWithChildren<IProps>) {
   const router = useRouter();
   return (
@@ -35,7 +37,7 @@ export default function VerticalGenericCard({
         height: "100%",
       }}
       onClick={() => {
-        router.push(`/${url}/${id}`);
+        router.push(isArtist ? `/${url}/${id}?type=artist` : `/${url}/${id}`);
       }}
     >
       <Box component="div" borderBottom="1px solid gray" height={"200px"}>

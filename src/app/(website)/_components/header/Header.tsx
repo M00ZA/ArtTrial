@@ -271,6 +271,7 @@ const Header = () => {
               name={memberProfile.name}
               email={memberProfile.email}
               onSignout={handleSignout}
+              isArtist={memberType == "artist"}
             />
           )}
           {memberProfile && memberType != "artist" && (

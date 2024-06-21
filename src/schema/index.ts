@@ -1,4 +1,5 @@
 import { isValidDate } from '@/lib/utils';
+import { duration } from '@mui/material';
 import { Phone } from 'lucide-react';
 import * as z from 'zod'
 
@@ -239,4 +240,45 @@ export const EditArtWorkSchema = z.object({
   depth: z.number().gt(0, { message: "Number required in depth" }),
   material: z.string().min(1, { message: "Material is required!" }),
   inEvent: z.boolean(),
+})
+
+
+export const AddProductToAuctionSchema = z.object({
+  title: z.string().min(1, { message: "Product title is required!" }),
+  description: z.string().min(1, { message: "Product description is required!" }),
+  style: z.string().min(1, { message: "Style is required!" }),
+  // isAvailable: z.boolean(),
+  subject: z.string().min(1, { message: "Subject is required!" }),
+  category: z.string().min(1, { message: "Subject is required!" }),
+  finalPrice: z.number().gt(0, { message: "Number required in finalPrice" }),
+  width: z.number().gt(0, { message: "Number required in width" }),
+  height: z.number().gt(0, { message: "Number required in height" }),
+  depth: z.number().gt(0, { message: "Number required in depth" }),
+  material: z.string().min(1, { message: "Material is required!" }),
+  coverImage: z.any()
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Select a picture (Max Size: 5MB).`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
+  images: z.any(),
+  duration: z.number().gt(0, { message: "Number required in duration" }),
+  began: z.string().min(1, { message: "began date is required" }).refine(began => isValidDate(began),"Began date must be a valid date and in the future"),
+})
+
+
+export const EditAuctionProductSchema = z.object({
+  title: z.string().min(1, { message: "Product title is required!" }),
+  description: z.string().min(1, { message: "Product description is required!" }),
+  style: z.string().min(1, { message: "Style is required!" }),
+  // isAvailable: z.boolean(),
+  subject: z.string().min(1, { message: "Subject is required!" }),
+  category: z.string().min(1, { message: "Subject is required!" }),
+  finalPrice: z.number().gt(0, { message: "Number required in finalPrice" }),
+  // width: z.number().gt(0, { message: "Number required in width" }),
+  // height: z.number().gt(0, { message: "Number required in height" }),
+  // depth: z.number().gt(0, { message: "Number required in depth" }),
+  material: z.string().min(1, { message: "Material is required!" }),
+  duration: z.number().gt(0, { message: "Number required in duration" }),
+  began: z.string().min(1, { message: "began date is required" }).refine(began => isValidDate(began,false),"Began date must be a valid date YYYY-MM-DD"),
 })

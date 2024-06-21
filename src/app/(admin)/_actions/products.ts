@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { headers, useAPI } from "@/lib/utils";
 import { getCookie } from "cookies-next";
-import { AddProductSchema, EditArtWorkSchema, EditProductSchema, EditUserSchema, addProductSchema } from "@/schema";
+import { AddProductSchema, AddProductToAuctionSchema, EditArtWorkSchema, EditProductSchema, EditUserSchema, addProductSchema } from "@/schema";
 import { IPaginationParams } from '@/types';
 
 
@@ -65,3 +65,27 @@ export async function addNewProduct( values: z.infer<typeof AddProductSchema>) {
     }
   })
 }
+
+
+export async function addNewProductToAuction( values: z.infer<typeof AddProductToAuctionSchema>) {
+  const token = getCookie('token')
+  const myFormData = new FormData()
+  for(const [key,value] of Object.entries(values)){
+    myFormData.append(key,value)
+  }
+
+  console.log("my formData")
+  console.log(myFormData)
+
+  // return await axios.post(useAPI(`products`), values, headers(token))
+  return await axios({
+    method:"post",
+    url:useAPI(`auction`),
+    data:myFormData,
+    headers:{
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data"
+    }
+  })
+}
+

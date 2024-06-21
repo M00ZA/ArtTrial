@@ -43,8 +43,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 // Types & Validation
 import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditArtWorkSchema } from "@/schema";
-import { Category, Event, Product } from "@/types";
+
+import { EditAuctionProductSchema } from "@/schema";
+import { Auction, Category, Event, Product } from "@/types";
 import { SubmitButton } from "@/app/(admin)/_components/submit-button";
 
 import {
@@ -59,8 +60,9 @@ import {
 import { getCategories } from "@/app/(admin)/_actions/categories";
 import { getStyles } from "@/app/(admin)/_actions/styles";
 import { getSubjects } from "@/app/(admin)/_actions/subjects";
+import { getAuctionDetails, updateProductFromAuction } from "@/actions/users";
 
-const EditArtWorkDetails = () => {
+export default function EditAuctionComponent() {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
@@ -75,12 +77,18 @@ const EditArtWorkDetails = () => {
     queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
   }, [pathname]);
 
-  const productQuery = useQuery({
-    queryKey: ["products", "me", id],
-    queryFn: () => getMeProduct(id as string),
+  // const productQuery = useQuery({
+  //   queryKey: ["products", "me", id],
+  //   queryFn: () => getMeProduct(id as string),
+  // });
+
+  const auctionQuery = useQuery({
+    queryKey: ["auction", "product", id],
+    queryFn: () => getAuctionDetails(id as string),
   });
 
-  const product: Product = productQuery.data?.data?.data;
+  const auction: Auction = auctionQuery.data?.data?.data;
+  // const product: Product = productQuery.data?.data?.data;
 
   const categoriesQuery = useQuery({
     queryKey: ["categories"],
@@ -101,20 +109,20 @@ const EditArtWorkDetails = () => {
   const subjects = subjectsQuery?.data?.data?.data;
 
   const editMutation = useMutation({
-    mutationFn: (values: zod.infer<typeof EditArtWorkSchema>) =>
-      updateMeProduct(id as string, values),
+    mutationFn: (values: zod.infer<typeof EditAuctionProductSchema>) =>
+      updateProductFromAuction(id as string, values),
     onSuccess: (d) => {
       if (d.data?.code === 200) {
-        toast.success("product updated successfully!", {
+        toast.success("Auction updated successfully!", {
           onAutoClose: () => {
-            router.push(`/gallery/${id}?type=artist`);
+            router.push(`/auction/${id}?type=artist`);
           },
         });
 
-        queryClient.invalidateQueries({ queryKey: ["products", "me", id] });
+        queryClient.invalidateQueries({ queryKey: ["auction", "product", id] });
         return;
       }
-      toast.error("Couldnot update product!");
+      toast.error("Couldnot update auction!");
     },
     onError: (d: any) => {
       if (d?.response?.data?.message) {
@@ -124,21 +132,22 @@ const EditArtWorkDetails = () => {
     },
   });
 
-  const form = useForm<zod.infer<typeof EditArtWorkSchema>>({
+  const form = useForm<zod.infer<typeof EditAuctionProductSchema>>({
     defaultValues: {
       title: "",
       description: "",
-      price: undefined,
-      width: "" as unknown as number,
-      height: "" as unknown as number,
-      depth: "" as unknown as number,
+      finalPrice: undefined,
+      // width: "" as unknown as number,
+      // height: "" as unknown as number,
+      // depth: "" as unknown as number,
       material: "",
       style: "",
       subject: "",
       category: "",
-      inEvent: false,
+      duration: undefined,
+      began: "",
     },
-    resolver: zodResolver(EditArtWorkSchema),
+    resolver: zodResolver(EditAuctionProductSchema),
   });
 
   const { register } = form;
@@ -155,26 +164,36 @@ const EditArtWorkDetails = () => {
 
   // console.log(style, "style");
   useEffect(() => {
-    if (product) {
-      const style = styles?.find((style) => style?.title == product?.style);
+    if (auction) {
+      const style = styles?.find((style) => style?.title == auction?.style);
       const category = categories?.find(
-        (category) => category?.title == product?.category
+        (category) => category?.title == auction?.category
       );
       const subject = subjects?.find(
-        (subject) => subject?.title == product?.subject
+        (subject) => subject?.title == auction?.subject
       );
-      form.setValue("title", product?.title);
-      form.setValue("description", product?.description);
-      form.setValue("price", product?.price);
-      form.setValue("width", parseInt(product?.width));
-      form.setValue("height", parseInt(product?.height));
-      form.setValue("depth", parseInt(product?.depth));
-      form.setValue("material", product?.material);
+      form.setValue("title", auction?.title);
+      form.setValue("description", auction?.description);
+      form.setValue(
+        "finalPrice",
+        auction?.lastPrices[auction?.lastPrices?.length - 1]?.price ||
+          auction?.price
+      );
+      // form.setValue("width", parseInt(auction?.width));
+      // form.setValue("height", parseInt(auction?.height));
+      // form.setValue("depth", parseInt(auction?.depth));
+      form.setValue("material", auction?.material);
       form.setValue("category", category?.id as string);
       form.setValue("style", style?.id as string);
       form.setValue("subject", subject?.id as string);
+      form.setValue(
+        "began",
+        auction?.began &&
+          new Date(auction?.began).toISOString().substring(0, 10)
+      );
+      form.setValue("duration", auction?.duration);
     }
-  }, [product, categories, styles, subjects]);
+  }, [auction, categories, styles, subjects]);
 
   return (
     <div className="flex justify-center flex-col items-center py-4   ">
@@ -231,18 +250,18 @@ const EditArtWorkDetails = () => {
 
           <FormField
             control={form.control}
-            name="price"
+            name="finalPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>price</FormLabel>
+                <FormLabel>finalPrice</FormLabel>
                 <FormControl>
                   <Input
                     //   defaultValue={event?.duration}
-                    {...register("price", {
+                    {...register("finalPrice", {
                       valueAsNumber: true,
                     })}
                     type="text"
-                    placeholder="price"
+                    placeholder="finalPrice"
                   />
                 </FormControl>
                 <FormDescription />
@@ -250,8 +269,7 @@ const EditArtWorkDetails = () => {
               </FormItem>
             )}
           />
-
-          <FormField
+          {/* <FormField
             control={form.control}
             name="width"
             render={({ field }) => (
@@ -315,7 +333,7 @@ const EditArtWorkDetails = () => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
@@ -345,7 +363,7 @@ const EditArtWorkDetails = () => {
                 <FormControl>
                   <Select
                     onValueChange={field.onChange}
-                    // defaultValue={field.value}
+                    // defaultValue={style?.id}
                     value={field.value}
                   >
                     <SelectTrigger>
@@ -418,9 +436,10 @@ const EditArtWorkDetails = () => {
               <FormItem>
                 <FormControl>
                   <Select
-                    onValueChange={field.onChange}
+                    {...field}
+                    // onValueChange={field.onChange}
                     // defaultValue={field.value}
-                    value={field.value}
+                    // value={field.value}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select Category" />
@@ -450,27 +469,46 @@ const EditArtWorkDetails = () => {
 
           <FormField
             control={form.control}
-            name="inEvent"
+            name="began"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Began</FormLabel>
                 <FormControl>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value + ""}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="in event" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>in event</SelectLabel>
-                        <SelectItem value={false + ""} defaultChecked>
-                          No
-                        </SelectItem>
-                        <SelectItem value={true + ""}>Yes</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                  <Input
+                    {...field}
+                    type="date"
+                    placeholder="Began"
+                    value={field.value}
+                    onChange={field.onChange}
+                    // defaultValue={new Date(auction?.began) as unknown as string}
+                    // defaultValue={new Date(field.value)
+                    //   .toISOString()
+                    //   .substring(0, 10)}
+                  />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  Duration <span>(days)</span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    //   defaultValue={event?.duration}
+                    {...register("duration", {
+                      valueAsNumber: true,
+                    })}
+                    type="text"
+                    placeholder="Duration"
+                  />
                 </FormControl>
                 <FormDescription />
                 <FormMessage />
@@ -538,6 +576,4 @@ const EditArtWorkDetails = () => {
       </Form>
     </div>
   );
-};
-
-export default EditArtWorkDetails;
+}
