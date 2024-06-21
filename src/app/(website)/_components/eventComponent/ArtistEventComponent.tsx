@@ -250,6 +250,7 @@ export default function ArtistEventComponent() {
                 category={product.category}
                 key={product.id}
                 id={product.id}
+                isArtist
               />
             ))}
         </Box>
