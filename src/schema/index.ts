@@ -203,3 +203,40 @@ export const addEventSchema = z.object({
 export const addProductSchema = z.object({
   productId: z.string().min(1, { message: "Please select a product to add" })
 })
+
+export const AddProductSchema = z.object({
+  title: z.string().min(1, { message: "Product title is required!" }),
+  description: z.string().min(1, { message: "Product description is required!" }),
+  style: z.string().min(1, { message: "Style is required!" }),
+  // isAvailable: z.boolean(),
+  subject: z.string().min(1, { message: "Subject is required!" }),
+  category: z.string().min(1, { message: "Subject is required!" }),
+  price: z.number().gt(0, { message: "Number required in width" }),
+  width: z.number().gt(0, { message: "Number required in width" }),
+  height: z.number().gt(0, { message: "Number required in height" }),
+  depth: z.number().gt(0, { message: "Number required in depth" }),
+  material: z.string().min(1, { message: "Material is required!" }),
+  coverImage: z.any()
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Select a picture (Max Size: 5MB).`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
+  inEvent: z.boolean(),
+  images: z.any()
+})
+
+export const EditArtWorkSchema = z.object({
+  title: z.string().min(1, { message: "Product title is required!" }),
+  description: z.string().min(1, { message: "Product description is required!" }),
+  style: z.string().min(1, { message: "Style is required!" }),
+  // isAvailable: z.boolean(),
+  subject: z.string().min(1, { message: "Subject is required!" }),
+  category: z.string().min(1, { message: "Subject is required!" }),
+  price: z.number().gt(0, { message: "Number required in width" }),
+  width: z.number().gt(0, { message: "Number required in width" }),
+  height: z.number().gt(0, { message: "Number required in height" }),
+  depth: z.number().gt(0, { message: "Number required in depth" }),
+  material: z.string().min(1, { message: "Material is required!" }),
+  inEvent: z.boolean(),
+})

@@ -6,10 +6,10 @@ export default function EventsComponent() {
   const loggedInAs = localStorage.getItem("loggedInAs");
   return (
     <>
-      {loggedInAs == "user" ? (
-        <UserEventsComponent />
-      ) : (
+      {loggedInAs == "artist" ? (
         <ArtistEventsComponent />
+      ) : (
+        <UserEventsComponent />
       )}
     </>
   );

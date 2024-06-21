@@ -273,7 +273,7 @@ const Header = () => {
               onSignout={handleSignout}
             />
           )}
-          {memberProfile && (
+          {memberProfile && memberType != "artist" && (
             <Link href="/cart">
               <ShoppingCartIcon
                 fontSize="medium"

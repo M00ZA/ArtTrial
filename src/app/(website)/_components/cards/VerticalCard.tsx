@@ -8,6 +8,7 @@ interface IProps {
   name: string;
   category: string;
   id: string;
+  isArtist?: boolean;
 }
 
 export default function VerticalCard({
@@ -16,6 +17,7 @@ export default function VerticalCard({
   name,
   category,
   id,
+  isArtist,
 }: IProps) {
   const router = useRouter();
   return (
@@ -31,7 +33,7 @@ export default function VerticalCard({
         cursor: "pointer",
       }}
       onClick={() => {
-        router.push(`/gallery/${id}`);
+        router.push(isArtist ? `/gallery/${id}?type=artist` : `/gallery/${id}`);
       }}
     >
       <Box component="div" borderBottom="1px solid gray" height={"200px"}>
