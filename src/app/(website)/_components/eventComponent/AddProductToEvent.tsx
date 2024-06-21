@@ -183,6 +183,7 @@ export default function AddProductToEvent() {
     console.log(form.getValues());
     addMutation.mutate({
       ...form.getValues(),
+      inEvent: true,
       //   duration: parseInt(duration as any),
       //   began:began,
     });

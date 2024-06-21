@@ -56,6 +56,7 @@ export const EditOrderComponent = () => {
       console.log(res);
       if (res.data?.code === 200) {
         toast.success("order state Updated successfully!");
+        router.push("/admin/orders");
         // router.push("/admin/profile");
         // refetch();
         return;
@@ -73,6 +74,7 @@ export const EditOrderComponent = () => {
       console.log(res);
       if (res.data?.code === 200) {
         toast.success("order Updated to paid successfully!");
+        router.push("/admin/orders");
         // router.push("/admin/profile");
         // refetch();
         return;
@@ -90,7 +92,7 @@ export const EditOrderComponent = () => {
       console.log(res);
       if (res.data?.code === 200) {
         toast.success("order Updated to delivered successfully!");
-        // router.push("/admin/profile");
+        router.push("/admin/orders");
         // refetch();
         return;
       }

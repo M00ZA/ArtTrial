@@ -25,10 +25,10 @@ export const TrackerSidebar = ({ language }: { language: string }) => {
         items={[{ href: "/admin/orders", label: "Orders", icon: ShoppingBag }]}
       />
 
-      <SidebarGroup
+      {/* <SidebarGroup
         label="Services"
         items={[{ href: "/admin/settings", label: "Settings", icon: Cog }]}
-      />
+      /> */}
 
       <SidebarGroup
         label="User"
