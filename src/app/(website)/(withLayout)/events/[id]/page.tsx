@@ -169,9 +169,18 @@
 //   );
 // }
 
-import EventComponent from "@/app/(website)/_components/eventComponent/EventComponent";
+// import EventComponent from "@/app/(website)/_components/eventComponent/EventComponent";
 import Header from "../../../_components/header/Header";
 import Footer from "../../../_components/footer/Footer";
+import dynamic from "next/dynamic";
+import LandingLoader from "@/app/(website)/_components/landingLoader/landingLoader";
+const EventComponent = dynamic(
+  () => import("@/app/(website)/_components/eventComponent/EventComponent"),
+  {
+    ssr: false,
+    loading: () => <LandingLoader />,
+  }
+);
 
 export default function EventView() {
   return (

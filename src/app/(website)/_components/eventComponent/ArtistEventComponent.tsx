@@ -1,0 +1,333 @@
+"use client";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import Image from "next/image";
+import VerticalCard from "../../_components/cards/VerticalCard";
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import {
+  deleteMeEvent,
+  getEvent,
+  getMeEvent,
+} from "@/app/(admin)/_actions/events";
+import { Event, userBookedEvent } from "@/types";
+import { useParams, usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useGetUserEvents } from "@/hooks/useGetUserProfile";
+import { bookEvent, getUserEvents } from "@/actions/users";
+import { Loader } from "@/components/loader";
+import LandingLoader from "../landingLoader/landingLoader";
+import { toast } from "sonner";
+
+function getTime(isoDate: string) {
+  return new Date(isoDate).getTime;
+}
+
+function isDateWithingTwoDates(
+  dateToCheck: string,
+  beginDate: string,
+  endDate: string
+) {
+  const dateToCheckTime = getTime(dateToCheck);
+  const beginDateTime = getTime(beginDate);
+  const endDateTime = getTime(endDate);
+
+  return dateToCheckTime >= beginDateTime && dateToCheckTime < endDateTime;
+}
+
+export default function ArtistEventComponent() {
+  const router = useRouter();
+  //   const { id } = router.query;
+  const { id } = useParams();
+  const pathname = usePathname();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["events", "me", id],
+      refetchType: "all",
+    });
+  }, [pathname]);
+
+  const userQueries = useQueries({
+    queries: [
+      {
+        queryKey: ["events", "me", id],
+        queryFn: () => getMeEvent(id as string),
+      },
+    ],
+  });
+
+  const { isLoading } = userQueries[0];
+  const event: Event = userQueries[0].data?.data?.data;
+
+  const deleteEventMutation = useMutation({
+    mutationFn: deleteMeEvent,
+    onSuccess: (d) => {
+      if (d.data?.code === 200) {
+        toast.success("Event deleted successfully!", {
+          onAutoClose: () => {
+            router.push(`/events?type=artist`);
+          },
+        });
+
+        return;
+      }
+      toast.error("Couldnot delete event!");
+      console.log(d);
+    },
+    onError: (d: any) => {
+      if (d?.response?.data?.message) {
+        toast.error(d?.response?.data?.message);
+      }
+    },
+  });
+
+  const eventBookingHandler = () => {
+    deleteEventMutation.mutate(id as string);
+  };
+
+  if (isLoading) {
+    return <LandingLoader />;
+  }
+
+  if (!event) {
+    return <div>event not found!</div>;
+  }
+
+  return (
+    <>
+      <Box
+        component="div"
+        padding="20px"
+        sx={{
+          maxWidth: { xs: "390px", md: "900px" },
+          margin: "0 auto",
+        }}
+      >
+        <Box
+          component="div"
+          // padding="20px"
+          sx={{
+            // maxWidth: { xs: "390px", md: "900px" },
+            // margin: "0 auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: { xs: "column", md: "row" },
+          }}
+        >
+          <Box
+            component="div"
+            maxWidth="390px"
+            height={"390px"}
+            overflow="hidden"
+            borderRadius={{ xs: "12px", md: "12px 0 0 12px" }}
+            border="1px solid gray"
+            borderRight={{ xs: "1px solid gray", md: "0px" }}
+          >
+            {/* <Image
+              src={event?.coverImage || "/services-1.svg"}
+              alt="exhibtion image"
+              height={300}
+              width={390}
+            /> */}
+            <img
+              src={event?.coverImage || "/services-1.svg"}
+              alt="img"
+              style={{ height: "100%" }}
+            />
+          </Box>
+          <Box
+            component="div"
+            maxWidth={350}
+            sx={{
+              margin: { xs: "0 auto", md: "initial" },
+              padding: "12px",
+              border: "1px solid gray",
+              borderLeft: { xs: "1px solid gray", md: "0" },
+              borderRadius: { xs: "12px", md: "0 12px 12px 0" },
+              height: "391px",
+            }}
+          >
+            <Typography
+              component="h3"
+              variant="body1"
+              marginBottom={".4rem"}
+              fontWeight={"bold"}
+            >
+              {event?.title}
+            </Typography>
+            <Typography component="h3" variant="body1" marginBottom={".4rem"}>
+              {event?.description}
+            </Typography>
+            <Typography
+              component="p"
+              variant="body2"
+              // fontSize={".6rem"}
+              color={"#7469B6"}
+              textAlign="right"
+              // sx={{
+              //   display: "flex",
+              //   alignItems: "center",
+              //   marginBottom: "6px",
+              // }}
+            >
+              {event?.owner?.name}
+            </Typography>
+            <Box component="div">
+              <Typography
+                component="p"
+                variant="body2"
+                // fontSize={".6rem"}
+                color={"#7469B6"}
+              >
+                From :{" "}
+                <Typography
+                  component="span"
+                  variant="body2"
+                  // fontSize={".6rem"}
+                  color={"black"}
+                >
+                  {event?.began
+                    ? new Date(event.began).toLocaleDateString()
+                    : "No date"}
+                </Typography>
+              </Typography>
+              <Box component="div" display={"flex"}>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  // fontSize={".6rem"}
+                  color={"#7469B6"}
+                >
+                  To :{" "}
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    // fontSize={".6rem"}
+                    color={"black"}
+                  >
+                    {event?.end
+                      ? new Date(event.end).toLocaleDateString()
+                      : "No date"}
+                  </Typography>
+                </Typography>
+                <Typography
+                  component="p"
+                  variant="body2"
+                  // fontSize={".6rem"}
+                  color={"#7469B6"}
+                  marginLeft="auto"
+                >
+                  {event?.duration + " "} days
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          component="section"
+          sx={{
+            padding: { xs: "20px 0", md: "20px" },
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr ",
+              md: "1fr 1fr ",
+              lg: "1fr 1fr ",
+            },
+            placeItems: "center",
+            // marginTop: "20px",
+            gap: ".5rem",
+          }}
+        >
+          {event?.products &&
+            event?.products.map((product) => (
+              <VerticalCard
+                imgUrl={product.coverImage}
+                title={product.title}
+                name={product.owner.name}
+                category={product.category}
+                key={product.id}
+                id={product.id}
+              />
+            ))}
+        </Box>
+        <Box
+          component="div"
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            gap: "8px",
+            width: "82%",
+            margin: " 0 auto 12px",
+          }}
+        >
+          <Button
+            className="w-fit"
+            style={{
+              padding: "1rem 0",
+              backgroundColor: "rgb(108 99 255 / 0.9)",
+              margin: "0 auto",
+              display: "inline-block",
+              //   width: "82%",
+              flex: 1,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              eventBookingHandler();
+            }}
+            variant="contained"
+            color="success"
+          >
+            Delete Event
+          </Button>
+          <Button
+            className="w-fit"
+            style={{
+              padding: "1rem 0",
+              backgroundColor: "rgb(108 99 255 / 0.9)",
+              margin: "0 auto",
+              display: "inline-block",
+              // width: "82%",
+              flex: 1,
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/events/${id}/edit?type=artist`);
+            }}
+            variant="contained"
+            color="success"
+          >
+            Edit Event
+          </Button>
+        </Box>
+        <Box component="div" sx={{ display: "flex", justifyContent: "center" }}>
+          <Button
+            className="w-fit"
+            style={{
+              padding: "1rem 0",
+              backgroundColor: "rgb(108 99 255 / 0.9)",
+              margin: "0 auto",
+              display: "inline-block",
+              width: "82%",
+            }}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(`/events/${id}/addproduct?type=artist`);
+            }}
+            variant="contained"
+            color="success"
+          >
+            Add Product To Event
+          </Button>
+        </Box>
+        {/* `/events/${id}?type=artist` */}
+      </Box>
+    </>
+  );
+}

@@ -106,3 +106,8 @@ export async function getUserEvents() {
     const token = getCookie('token')
     return await axios.get(useAPI(`search/user?keyword=${searchKeywork}`), headers(token))
   }
+
+  export async function getMyAuctions(params: IPaginationParams|undefined={}) {
+    const token = getCookie('token')
+    return await axios.get(useAPI(`auction/me`), {...headers(token),params})
+  }

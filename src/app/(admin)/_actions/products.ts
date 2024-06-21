@@ -26,3 +26,8 @@ export async function deleteProduct(id: string) {
   const token = getCookie('token')
   return await axios.delete(useAPI(`products/${id}`), headers(token))
 }
+
+export async function getMeProducts(params: IPaginationParams|undefined={}) {
+  const token = getCookie('token')
+  return await axios.get(useAPI(`products/me`), {...headers(token),params})
+}

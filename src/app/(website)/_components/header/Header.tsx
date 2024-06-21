@@ -175,7 +175,7 @@ const Header = () => {
           component="li"
           sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
         >
-          <Link href={"/"}>
+          <Link href={memberType == "artist" ? "/?type=artist" : "/"}>
             <Typography
               component="p"
               sx={{
@@ -192,7 +192,9 @@ const Header = () => {
           component="li"
           sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
         >
-          <Link href={"/gallery"}>
+          <Link
+            href={memberType == "artist" ? "/gallery?type=artist" : "/gallery"}
+          >
             <Typography
               component="p"
               sx={{
@@ -209,7 +211,9 @@ const Header = () => {
           component="li"
           sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
         >
-          <Link href={"/events"}>
+          <Link
+            href={memberType == "artist" ? "/events?type=artist" : "/events"}
+          >
             <Typography
               component="p"
               sx={{
@@ -226,7 +230,9 @@ const Header = () => {
           component="li"
           sx={{ borderBottom: { xs: "4px double #50c4a273", md: "initial" } }}
         >
-          <Link href={"/auction"}>
+          <Link
+            href={memberType == "artist" ? "/auction?type=artist" : "/auction"}
+          >
             <Typography
               component="p"
               sx={{

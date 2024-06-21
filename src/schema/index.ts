@@ -1,3 +1,4 @@
+import { isValidDate } from '@/lib/utils';
 import { Phone } from 'lucide-react';
 import * as z from 'zod'
 
@@ -96,7 +97,7 @@ export const EditEventSchema = z.object({
   title: z.string().min(1, { message: "Event title is required!" }),
   description: z.string().min(1, { message: "Event description is required!" }),
   duration: z.number().gt(0, { message: "Number required in duration" }),
-  products: z.string().array()
+  products: z.string().array().optional()
 })
 
 export const userLoginSchema = z.object({
@@ -184,4 +185,21 @@ export const userAddressSchema =  z.object({
   city: z.string().min(1, { message: "city cannot be empty "}),
   street: z.string().min(1, { message: "street cannot be empty "}),
   postalCode: z.string().min(1, { message: "postalCode cannot be empty "}),
+})
+
+export const addEventSchema = z.object({
+  title: z.string().min(1, { message: "Event title is required!" }),
+  description: z.string().min(100, { message: "Event description is too short!" }),
+  duration: z.number().gt(0, { message: "Number required in duration" }),
+  began: z.string().min(1, { message: "began date is required" }).refine(began => isValidDate(began),"Began date must be a valid date and in the future"),
+  coverImage: z.any()
+  .refine((file) => file?.size <= MAX_FILE_SIZE, `Select a picture (Max Size: 5MB).`)
+  .refine(
+    (file) => ACCEPTED_IMAGE_TYPES.includes(file?.type),
+    "Only .jpg, .jpeg, .png and .webp formats are supported."
+  ),
+})
+
+export const addProductSchema = z.object({
+  productId: z.string().min(1, { message: "Please select a product to add" })
 })

@@ -11,6 +11,7 @@ interface IProps {
   name: string;
   imgUrl: string;
   id: string;
+  isArtist?: boolean;
 }
 
 export default function ExhibitionCard({
@@ -20,6 +21,7 @@ export default function ExhibitionCard({
   name,
   imgUrl,
   id,
+  isArtist,
 }: IProps) {
   const router = useRouter();
   return (
@@ -37,7 +39,7 @@ export default function ExhibitionCard({
           cursor: "pointer",
         }}
         onClick={() => {
-          router.push(`/events/${id}`);
+          router.push(isArtist ? `/events/${id}?type=artist` : `/events/${id}`);
         }}
       >
         <Box
