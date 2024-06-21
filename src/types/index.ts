@@ -128,7 +128,8 @@ export type IPaginationParams = {
   limit?:number,
   sort?:string,
   "duration[lte]"?:number,
-  "duration[gte]"?:number
+  "duration[gte]"?:number,
+  sendResultToEmail?:boolean
 }
 
 export type Cart ={
@@ -215,6 +216,13 @@ export type GetStylesResponse =GeneralApiResponse<Array<Partial<Style>>>
 export type GetSubjectsResponse =GeneralApiResponse<Array<Partial<Subject>>>
 export type GetAdminsResponse = GeneralApiResponse<{admins:Array<Admin>,pagination:AdminPagination}>
 export type GetUsersResponse = GeneralApiResponse<{users:Array<User>,pagination:AdminPagination}>
+export type GetLastAuctionsReportResponse =  GeneralApiResponse<{availableAuctions:Array<Auction>,pagination:AdminPagination}>
+export type GetLastEventsReportResponse =  GeneralApiResponse<{availableEvents:Array<Event>,pagination:AdminPagination}>
+export type GetSingleArtistStatisticReportResponse =  GeneralApiResponse<Artist&{availableProducts:Array<Product>}>
+export type GetArtistStatisticReportResponse =  GeneralApiResponse<{artistStatistic:Array<Artist>,pagination:AdminPagination}>
+export type GetUnavailableProductsReportResponse =  GeneralApiResponse<{unavailableProducts:Array<Product>,pagination:AdminPagination}>
+export type GetAllProductsReportResponse =  GeneralApiResponse<{availableProducts:Array<Product>,pagination:AdminPagination}>
+
 
 export type GeneralApiResponse<T> = {
   status: string,

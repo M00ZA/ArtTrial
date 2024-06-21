@@ -28,10 +28,31 @@ import { useQueries } from "@tanstack/react-query";
 import { useAdmin } from "@/hooks/useAdmin";
 import { getStyles } from "../../_actions/styles";
 import { getSubjects } from "../../_actions/subjects";
+import {
+  getAllProductsReport,
+  getArtistStatisticReport,
+  getLastAuctionsReport,
+  getLastEventsReport,
+  getSingleArtistStatisticReport,
+  getUnavailableProductsReport,
+} from "../../_actions/reports";
+import { useState } from "react";
+import ReportsElement from "./reportsElement";
+import { getOrders } from "../../_actions/orders";
 
 export const StatsComponent = () => {
   const { admin, isLoading: adminStillLoading } = useAdmin();
   console.log(admin);
+
+  const [enabledReports, setEnabledReports] = useState({
+    availableProducts: false,
+    unavailableProducts: false,
+    artistsStatistic: false,
+    singleArtistStatistic: false,
+    availableEvents: false,
+    availableAuctions: false,
+  });
+
   const queriesForIT = useQueries({
     queries: [
       {
@@ -79,6 +100,52 @@ export const StatsComponent = () => {
         queryFn: () => getSubjects(),
         enabled: admin?.role?.toLowerCase() === "ceo",
       },
+      {
+        queryKey: ["reports", "available", "products"],
+        queryFn: () => getAllProductsReport({ sendResultToEmail: true }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.availableProducts,
+      },
+      {
+        queryKey: ["reports", "unavailable", "products"],
+        queryFn: () =>
+          getUnavailableProductsReport({ sendResultToEmail: true }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.unavailableProducts,
+      },
+      {
+        queryKey: ["reports", "artists", "statistics"],
+        queryFn: () => getArtistStatisticReport({ sendResultToEmail: true }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.artistsStatistic,
+      },
+      {
+        queryKey: ["reports", "artist", "statistics"],
+        queryFn: () =>
+          getSingleArtistStatisticReport(admin?.id, {
+            sendResultToEmail: true,
+          }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.singleArtistStatistic,
+      },
+      {
+        queryKey: ["reports", "events"],
+        queryFn: () => getLastEventsReport({ sendResultToEmail: true }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.availableEvents,
+      },
+      {
+        queryKey: ["reports", "auction"],
+        queryFn: () => getLastAuctionsReport({ sendResultToEmail: true }),
+        enabled:
+          admin?.role?.toLowerCase() === "ceo" &&
+          enabledReports.availableAuctions,
+      },
     ],
   });
 
@@ -86,7 +153,7 @@ export const StatsComponent = () => {
     queries: [
       {
         queryKey: ["orders"],
-        queryFn: () => getCategories(),
+        queryFn: () => getOrders(),
         enabled: admin?.role?.toLowerCase() === "tracker",
       },
     ],
@@ -106,6 +173,36 @@ export const StatsComponent = () => {
     admins: { count: queriesForCEO[1].data?.data?.data?.admins?.length || 0 },
     styles: { count: queriesForCEO[2].data?.data?.data?.length || 0 },
     subjects: { count: queriesForCEO[3].data?.data?.data?.length || 0 },
+    availableProducts: {
+      count: queriesForCEO[4].data?.data?.data?.pagination?.totalResults,
+      code: queriesForCEO[4].data?.data?.code,
+      loading: queriesForCEO[4].isLoading,
+    },
+    unavailableProducts: {
+      count: queriesForCEO[5].data?.data?.data?.pagination?.totalResults,
+      code: queriesForCEO[5].data?.data?.code,
+      loading: queriesForCEO[5].isLoading,
+    },
+    artistsStatistic: {
+      count: queriesForCEO[6].data?.data?.data?.pagination?.totalResults,
+      code: queriesForCEO[6].data?.data?.code,
+      loading: queriesForCEO[6].isLoading,
+    },
+    singleArtistStatistic: {
+      count: queriesForCEO[7].data?.data?.data?.availableProducts?.length,
+      code: queriesForCEO[7].data?.data?.code,
+      loading: queriesForCEO[7].isLoading,
+    },
+    availableEvents: {
+      count: queriesForCEO[8].data?.data?.data?.pagination?.totalResults,
+      code: queriesForCEO[8].data?.data?.code,
+      loading: queriesForCEO[8].isLoading,
+    },
+    availableAuctions: {
+      count: queriesForCEO[9].data?.data?.data?.pagination?.totalResults,
+      code: queriesForCEO[9].data?.data?.code,
+      loading: queriesForCEO[9].isLoading,
+    },
   };
 
   const dataForTracker = {
@@ -173,36 +270,92 @@ export const StatsComponent = () => {
 
   if (admin?.role?.toLowerCase() === "ceo") {
     return (
-      <div className="grid grid-cols-4 gap-6 mb-6">
-        <StatsComponent.Item
-          label="Admins"
-          stats={dataForCEO.admins.count}
-          url="/admin/admins"
-          urlLabel="Admins"
-          icon={Lock}
-        />
-        <StatsComponent.Item
-          label="Categories"
-          stats={dataForCEO?.categories?.count}
-          url="/admin/categories"
-          urlLabel="All categories"
-          icon={ListChecks}
-        />
-        <StatsComponent.Item
-          label="Styles"
-          stats={dataForCEO.styles.count}
-          url="/admin/styles"
-          urlLabel="Styles"
-          icon={Wand2}
-        />
-        <StatsComponent.Item
-          label="Subjects"
-          stats={dataForCEO.subjects.count}
-          url="/admin/subjects"
-          urlLabel="Subjects"
-          icon={Captions}
-        />
-      </div>
+      <>
+        <div className="grid grid-cols-4 gap-6 mb-6">
+          <StatsComponent.Item
+            label="Admins"
+            stats={dataForCEO.admins.count}
+            url="/admin/admins"
+            urlLabel="Admins"
+            icon={Lock}
+          />
+          <StatsComponent.Item
+            label="Categories"
+            stats={dataForCEO?.categories?.count}
+            url="/admin/categories"
+            urlLabel="All categories"
+            icon={ListChecks}
+          />
+          <StatsComponent.Item
+            label="Styles"
+            stats={dataForCEO.styles.count}
+            url="/admin/styles"
+            urlLabel="Styles"
+            icon={Wand2}
+          />
+          <StatsComponent.Item
+            label="Subjects"
+            stats={dataForCEO.subjects.count}
+            url="/admin/subjects"
+            urlLabel="Subjects"
+            icon={Captions}
+          />
+        </div>
+        <div className="bg-gray-200 h-screen w-full dark:bg-gray-700 flex justify-center items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:py-24 lg:px-8">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 mt-4">
+              <ReportsElement
+                property="availableProducts"
+                label="Available products"
+                code={dataForCEO?.availableProducts?.code}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+                isLoading={dataForCEO?.availableProducts?.loading}
+              />
+              <ReportsElement
+                property="unavailableProducts"
+                label="Unavailable Products"
+                code={dataForCEO?.unavailableProducts?.code}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+                isLoading={dataForCEO?.unavailableProducts?.loading}
+              />
+              <ReportsElement
+                property="artistsStatistic"
+                label="Artists Statistic"
+                code={dataForCEO?.artistsStatistic?.code}
+                isLoading={dataForCEO?.artistsStatistic?.loading}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+              />
+              <ReportsElement
+                property="singleArtistStatistic"
+                label="Single Artist Statistic"
+                code={dataForCEO?.singleArtistStatistic?.code}
+                isLoading={dataForCEO?.singleArtistStatistic?.loading}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+              />
+              <ReportsElement
+                property="availableEvents"
+                label="Available Events"
+                code={dataForCEO?.availableEvents?.code}
+                isLoading={dataForCEO?.availableEvents?.loading}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+              />
+              <ReportsElement
+                property="availableAuctions"
+                label="Available Auctions"
+                code={dataForCEO?.availableAuctions?.code}
+                isLoading={dataForCEO?.availableAuctions?.loading}
+                enabledReports={enabledReports}
+                setEnabledReports={setEnabledReports}
+              />
+            </div>
+          </div>
+        </div>
+      </>
     );
   }
 
@@ -211,7 +364,7 @@ export const StatsComponent = () => {
       <div className="grid grid-cols-4 gap-6 mb-6">
         <StatsComponent.Item
           label="Orders"
-          stats={dataForCEO.categories.count}
+          stats={dataForTracker.orders.count}
           url="/admin/orders"
           urlLabel="All orders"
           icon={ShoppingBasket}
