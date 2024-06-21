@@ -481,9 +481,10 @@ export const AddProductComponent = () => {
                       //   setPic(e?.currentTarget?.files[0]);
                       //   changeMultipleFiles(e,form)
                       if (e.target.files) {
-                        const imageArray = Array.from(e.target.files).map(
-                          (file) => URL.createObjectURL(file)
-                        );
+                        // const imageArray = Array.from(e.target.files).map(
+                        //   (file) => URL.createObjectURL(file)
+                        // );
+                        const imageArray = Array.from(e.target.files);
 
                         console.log(imageArray);
                         // setMultipleImages((prevImages) => [...prevImages, ...imageArray]);

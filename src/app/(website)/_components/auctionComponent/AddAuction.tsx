@@ -487,9 +487,10 @@ export const AddAuctionComponent = () => {
                       //   setPic(e?.currentTarget?.files[0]);
                       //   changeMultipleFiles(e,form)
                       if (e.target.files) {
-                        const imageArray = Array.from(e.target.files).map(
-                          (file) => URL.createObjectURL(file)
-                        );
+                        // const imageArray = Array.from(e.target.files).map(
+                        //   (file) => URL.createObjectURL(file)
+                        // );
+                        const imageArray = Array.from(e.target.files);
 
                         // const imageArray = JSON.stringify(
                         //   Array.from(e.target.files).map((file) =>

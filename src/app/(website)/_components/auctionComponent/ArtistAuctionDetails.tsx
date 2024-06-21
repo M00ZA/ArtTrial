@@ -46,7 +46,7 @@ export default function ArtistAuctionDetails() {
       if (d.data?.code === 200) {
         toast.success("Auction has been deleted successfully!", {
           onAutoClose: () => {
-            router.push(`auction?type=artist`);
+            router.push(`/auction?type=artist`);
           },
         });
 

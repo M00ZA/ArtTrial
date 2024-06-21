@@ -52,8 +52,19 @@ export async function addNewProduct( values: z.infer<typeof AddProductSchema>) {
   const token = getCookie('token')
   const myFormData = new FormData()
   for(const [key,value] of Object.entries(values)){
-    myFormData.append(key,value)
+
+    if(key == "images"){
+        values.images.forEach((element: string | Blob) => {
+        console.log("element",element)
+        myFormData.append("images",element)
+    });
+    }else{
+      myFormData.append(key,value)
+    }
+
+    
   }
+  console.log(JSON.stringify(myFormData))
   // return await axios.post(useAPI(`products`), values, headers(token))
   return await axios({
     method:"post",
@@ -71,11 +82,19 @@ export async function addNewProductToAuction( values: z.infer<typeof AddProductT
   const token = getCookie('token')
   const myFormData = new FormData()
   for(const [key,value] of Object.entries(values)){
-    myFormData.append(key,value)
-  }
 
-  console.log("my formData")
-  console.log(myFormData)
+    if(key == "images"){
+        values.images.forEach((element: string | Blob) => {
+        console.log("element",element)
+        myFormData.append("images",element)
+    });
+    }else{
+      myFormData.append(key,value)
+    }
+
+    
+  }
+  console.log(JSON.stringify(myFormData))
 
   // return await axios.post(useAPI(`products`), values, headers(token))
   return await axios({
