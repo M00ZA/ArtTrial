@@ -43,12 +43,12 @@ export default function Signup() {
   const endpoint = type == "artist" ? "artistAuth/signup" : "userAuth/signup";
   const form = useForm<Zod.infer<typeof userSignupSchema>>({
     defaultValues: {
-      name: "temp name1",
-      password: "#Mohammed2002",
-      passwordConfirm: "#Mohammed2002",
-      phone: "12013514000",
-      email: "jacot99617@adrais.com",
-      gender: "male",
+      name: "",
+      password: "",
+      passwordConfirm: "",
+      phone: "",
+      email: "",
+      gender: "",
     },
     resolver: zodResolver(userSignupSchema),
   });

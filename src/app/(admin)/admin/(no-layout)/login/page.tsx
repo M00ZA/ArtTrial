@@ -34,8 +34,8 @@ const AdminLoginPage = () => {
 
   const form = useForm<zod.infer<typeof AdminLoginSchema>>({
     defaultValues: {
-      username: "mohamed",
-      password: "Mohammed2002",
+      username: "",
+      password: "",
     },
     resolver: zodResolver(AdminLoginSchema),
   });

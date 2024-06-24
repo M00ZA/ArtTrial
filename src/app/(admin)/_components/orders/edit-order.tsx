@@ -128,11 +128,12 @@ export const EditOrderComponent = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(updateOrderStateHandler)}
-            className="flex flex-col gap-y-1 mt-5"
+            className="flex flex-col gap-y-1 mt-5 max-w-[245px]"
           >
             <FormField
               control={form.control}
               name="state"
+              
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>State</FormLabel>
@@ -169,7 +170,7 @@ export const EditOrderComponent = () => {
               disabled={
                 updateOrderStateMutation.status === "pending" ? true : false
               }
-              className="w-fit text-xs"
+              className="w-fit text-xs min-w-[245px]"
             >
               <span>
                 {updateOrderStateMutation.status === "pending" ? (
@@ -188,7 +189,7 @@ export const EditOrderComponent = () => {
           }}
           size="sm"
           disabled={updateToPaidMutation.status === "pending" ? true : false}
-          className="w-fit text-xs"
+          className="w-fit text-xs mr-2 mt-2"
         >
           <span>
             {updateToPaidMutation.status === "pending" ? (

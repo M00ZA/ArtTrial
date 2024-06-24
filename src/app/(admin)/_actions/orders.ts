@@ -11,15 +11,15 @@ export async function getOrders() {
   
   export async function updateOrderState(id:string,params:zod.infer<typeof changeOrderStateSchema>) {
     const token = getCookie('token')
-    return await axios.patch(useAPI(`order/${id}/state`), {...headers(token)})
+    return await axios.patch(useAPI(`order/${id}/state`),params ,{...headers(token)})
   }
 
   export async function updateOrderToPaid(id:string) {
     const token = getCookie('token')
-    return await axios.patch(useAPI(`order/${id}/paid`), {...headers(token)})
+    return await axios.patch(useAPI(`order/${id}/paid`),undefined ,headers(token))
   }
 
   export async function updateOrderToDelivered(id:string) {
     const token = getCookie('token')
-    return await axios.patch(useAPI(`order/${id}/delivered`), {...headers(token)})
+    return await axios.patch(useAPI(`order/${id}/delivered`), undefined,headers(token))
   }

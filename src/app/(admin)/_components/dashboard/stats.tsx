@@ -328,14 +328,14 @@ export const StatsComponent = () => {
                 enabledReports={enabledReports}
                 setEnabledReports={setEnabledReports}
               />
-              <ReportsElement
+              {/* <ReportsElement
                 property="singleArtistStatistic"
                 label="Single Artist Statistic"
                 code={dataForCEO?.singleArtistStatistic?.code}
                 isLoading={dataForCEO?.singleArtistStatistic?.loading}
                 enabledReports={enabledReports}
                 setEnabledReports={setEnabledReports}
-              />
+              /> */}
               <ReportsElement
                 property="availableEvents"
                 label="Available Events"
